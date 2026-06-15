@@ -1124,7 +1124,7 @@
         </div>
       </div>
 
-      <div class="stats">
+      <div class="stats" id="heroStats">
         <div class="stat reveal">
           <div class="num"><span>40</span>+</div>
           <div class="desc">Agents in production</div>
@@ -1410,7 +1410,7 @@
         <h2>Teams running on Origin Core.</h2>
       </div>
 
-      <div class="testimonial-grid">
+      <div class="testimonial-grid" id="testimonialGrid">
         <div class="testimonial reveal">
           <p class="quote">"Our support agent now handles the majority of first-line tickets on its own, and escalates the rest with full context. Response times dropped within the first month."</p>
           <div class="who"><strong>Director of Operations</strong>Logistics &amp; freight</div>
@@ -1558,21 +1558,70 @@
     form.reset();
   });
 
-  // Scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window){
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting){
-          entry.target.classList.add('in-view');
-          revealObserver.unobserve(entry.target);
-        }
+  // ============================================================
+  // CMS API
+  // If you've set up the Django backend (see SETUP.md in the
+  // careers CMS package), put its URL here. Leave empty to use
+  // the static content already in this page.
+  // Example: 'https://yourname.pythonanywhere.com/api'
+  // ============================================================
+  const API_BASE = '';
+
+  async function hydrateStats(page){
+    if (!API_BASE) return;
+    try{
+      const res = await fetch(`${API_BASE}/stats/?page=${page}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data) || !data.length) return;
+      const statEls = document.querySelectorAll('#heroStats .stat');
+      data.forEach((stat, i) => {
+        const el = statEls[i];
+        if (!el) return;
+        el.querySelector('.num').innerHTML = `<span>${stat.value}</span>${stat.suffix || ''}`;
+        el.querySelector('.desc').textContent = stat.label;
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(el => revealObserver.observe(el));
-  } else {
-    revealEls.forEach(el => el.classList.add('in-view'));
+    } catch (e) { /* keep static stats */ }
   }
+
+  async function hydrateTestimonials(){
+    if (!API_BASE) return;
+    try{
+      const res = await fetch(`${API_BASE}/testimonials/`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data) || !data.length) return;
+      const grid = document.getElementById('testimonialGrid');
+      grid.innerHTML = data.map(t => `
+        <div class="testimonial reveal">
+          <p class="quote">"${t.quote}"</p>
+          <div class="who"><strong>${t.name}</strong>${t.detail || ''}</div>
+        </div>
+      `).join('');
+    } catch (e) { /* keep static testimonials */ }
+  }
+
+  function setupRevealObserver(){
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window){
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting){
+            entry.target.classList.add('in-view');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(el => revealObserver.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('in-view'));
+    }
+  }
+
+  (async function init(){
+    await Promise.all([hydrateStats('home'), hydrateTestimonials()]);
+    setupRevealObserver();
+  })();
 </script>
 
 </body>
