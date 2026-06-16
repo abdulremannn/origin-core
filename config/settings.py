@@ -123,7 +123,7 @@ STATIC_URL = 'static/'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://your-site.vercel.app",
+    "https://origin-core-eta.vercel.app",
     "http://localhost:3000",
 ]
 
