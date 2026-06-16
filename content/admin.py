@@ -13,7 +13,7 @@ class JobPostingAdmin(admin.ModelAdmin):
             "fields": ("title", "department", "location", "job_type", "is_active", "order")
         }),
         ("Description", {
-            "fields": ("blurb", "responsibilities", "requirements")
+            "fields": ("blurb", "responsibilities", "requirements", "apply_url")
         }),
     )
 
