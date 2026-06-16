@@ -19,6 +19,7 @@ class JobPosting(models.Model):
     is_active = models.BooleanField(default=True, help_text="Untick to hide from the careers page.")
     order = models.PositiveIntegerField(default=0, help_text="Lower numbers show first.")
     created_at = models.DateTimeField(auto_now_add=True)
+    apply_url = models.URLField(max_length=300, blank=True, help_text="Tally or other application form URL for this role.")
 
     class Meta:
         ordering = ["order", "-created_at"]

@@ -11,7 +11,7 @@ class JobPostingSerializer(serializers.ModelSerializer):
         model = JobPosting
         fields = [
             "id", "title", "department", "location", "type",
-            "blurb", "responsibilities", "requirements",
+            "blurb", "responsibilities", "requirements", "apply_url",
         ]
 
     def get_responsibilities(self, obj):
