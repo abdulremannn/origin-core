@@ -160,3 +160,5 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+ALLOWED_HOSTS = ['abdul1mug.pythonanywhere.com']
