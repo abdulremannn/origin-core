@@ -161,4 +161,4 @@ JAZZMIN_UI_TWEAKS = {
     },
 }
 
-ALLOWED_HOSTS = ['abdul1mug.pythonanywhere.com']
+ALLOWED_HOSTS = ['origincore.pythonanywhere.com']
