@@ -162,3 +162,6 @@ JAZZMIN_UI_TWEAKS = {
 }
 
 ALLOWED_HOSTS = ['origincore.pythonanywhere.com']
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = '/static/'
