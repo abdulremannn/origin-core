@@ -216,7 +216,7 @@ def _call_groq(message):
             return "Groq rate limit reached. Please try again shortly."
 
         if response.status_code >= 400:
-            return f"Groq HTTP error {response.status_code}: {response.text[:500]}"
+            return "The AI assistant is temporarily unavailable. Please try again or contact OriginCore through the form below."
 
         data = response.json()
         answer = data["choices"][0]["message"]["content"].strip()
@@ -226,11 +226,11 @@ def _call_groq(message):
             or "I can help with OriginCore services, AI agents, enterprise software, automation, integrations, and project planning."
         )
 
-    except requests.RequestException as exc:
-        return f"Groq connection error: {str(exc)[:500]}"
+    except requests.RequestException:
+        return "The AI assistant is temporarily unavailable. Please try again or contact OriginCore through the form below."
 
-    except Exception as exc:
-        return f"Groq response error: {str(exc)[:500]}"
+    except Exception:
+        return "The AI assistant is temporarily unavailable. Please try again or contact OriginCore through the form below."
 
 
 @api_view(["GET"])
