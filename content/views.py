@@ -1,7 +1,6 @@
 import json
 import os
-import urllib.error
-import urllib.request
+import requests
 
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -187,7 +186,7 @@ def _call_groq(message):
         )
 
     payload = {
-        "model": getattr(settings, "GROQ_CHAT_MODEL", "llama-3.1-8b-instant"),
+        "model": getattr(settings, "GROQ_CHAT_MODEL", "llama-3.3-70b-versatile"),
         "messages": [
             {"role": "system", "content": CHATBOT_SYSTEM_PROMPT},
             {"role": "user", "content": message},
@@ -197,41 +196,41 @@ def _call_groq(message):
         "top_p": 0.9,
     }
 
-    request = urllib.request.Request(
-        "https://api.groq.com/openai/v1/chat/completions",
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        method="POST",
-    )
-
     try:
-        with urllib.request.urlopen(request, timeout=20) as response:
-            data = json.loads(response.read().decode("utf-8"))
-            answer = data["choices"][0]["message"]["content"].strip()
-            return (
-                answer
-                or "I can help with OriginCore services, AI agents, enterprise software, automation, integrations, and project planning."
-            )
-    except urllib.error.HTTPError as exc:
-        try:
-            error_body = exc.read().decode("utf-8")
-        except Exception:
-            error_body = ""
+        response = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "OriginCoreWebsite/1.0",
+            },
+            json=payload,
+            timeout=20,
+        )
 
-        if exc.code == 401:
+        if response.status_code == 401:
             return "Groq authentication failed. Please check the GROQ_API_KEY on PythonAnywhere."
 
-        if exc.code == 429:
+        if response.status_code == 429:
             return "Groq rate limit reached. Please try again shortly."
 
-        return f"Groq HTTP error {exc.code}: {error_body[:500]}"
+        if response.status_code >= 400:
+            return f"Groq HTTP error {response.status_code}: {response.text[:500]}"
+
+        data = response.json()
+        answer = data["choices"][0]["message"]["content"].strip()
+
+        return (
+            answer
+            or "I can help with OriginCore services, AI agents, enterprise software, automation, integrations, and project planning."
+        )
+
+    except requests.RequestException as exc:
+        return f"Groq connection error: {str(exc)[:500]}"
 
     except Exception as exc:
-        return f"Groq connection error: {str(exc)[:500]}"
+        return f"Groq response error: {str(exc)[:500]}"
 
 
 @api_view(["GET"])
