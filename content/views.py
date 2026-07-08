@@ -217,13 +217,21 @@ def _call_groq(message):
                 or "I can help with OriginCore services, AI agents, enterprise software, automation, integrations, and project planning."
             )
     except urllib.error.HTTPError as exc:
+        try:
+            error_body = exc.read().decode("utf-8")
+        except Exception:
+            error_body = ""
+
         if exc.code == 401:
-            return "The AI assistant could not authenticate with Groq. Please check the server GROQ_API_KEY."
+            return "Groq authentication failed. Please check the GROQ_API_KEY on PythonAnywhere."
+
         if exc.code == 429:
-            return "The AI assistant is receiving too many requests right now. Please try again shortly."
-        return "The AI assistant is temporarily unavailable. Please try again or contact OriginCore through the form below."
-    except Exception:
-        return "The AI assistant is temporarily unavailable. Please try again or contact OriginCore through the form below."
+            return "Groq rate limit reached. Please try again shortly."
+
+        return f"Groq HTTP error {exc.code}: {error_body[:500]}"
+
+    except Exception as exc:
+        return f"Groq connection error: {str(exc)[:500]}"
 
 
 @api_view(["GET"])
