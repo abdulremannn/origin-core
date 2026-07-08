@@ -8,4 +8,5 @@ urlpatterns = [
     path("stats/", views.stats_list, name="api-stats"),
     path("settings/", views.settings_dict, name="api-settings"),
     path("chatbot/", views.chatbot_reply, name="api-chatbot"),
+    path("inquiries/", views.submit_project_inquiry, name="api-project-inquiries"),
 ]

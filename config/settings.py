@@ -137,6 +137,7 @@ JAZZMIN_SETTINGS = {
         "content.Testimonial": "fas fa-quote-right",
         "content.SiteStat": "fas fa-chart-line",
         "content.SiteSetting": "fas fa-sliders-h",
+        "content.ProjectInquiry": "fas fa-inbox",
     },
 }
 
