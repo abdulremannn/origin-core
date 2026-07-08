@@ -809,6 +809,89 @@ section{padding:var(--section-y) 0}
   letter-spacing:.04em;
 }
 
+.chatbot-rfq{
+  display:none;
+  margin-top:18px;
+  text-align:left;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,62,125,.12),transparent 42%),
+    rgba(255,255,255,.045);
+  box-shadow:0 20px 60px rgba(0,0,0,.22);
+  padding:20px;
+}
+
+.chatbot-rfq.open{
+  display:block;
+  animation:chatbot-pop .28s var(--ease) both;
+}
+
+.chatbot-rfq h3{
+  font-size:1.05rem;
+  margin-bottom:8px;
+}
+
+.chatbot-rfq p{
+  color:var(--text-dim);
+  font-size:.94rem;
+  margin-bottom:16px;
+}
+
+.chatbot-rfq-summary{
+  color:var(--text-dim);
+  background:rgba(0,0,0,.16);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:14px;
+  font-size:.92rem;
+  line-height:1.6;
+  white-space:pre-wrap;
+  margin-bottom:16px;
+}
+
+.chatbot-rfq-form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.chatbot-rfq-form input{
+  min-height:44px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(21,16,32,.55);
+  color:var(--text);
+  padding:12px 13px;
+  outline:none;
+}
+
+.chatbot-rfq-form input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-soft);
+}
+
+.chatbot-rfq-actions{
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:2px;
+}
+
+.chatbot-rfq-status{
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:12px;
+}
+
+@media (max-width:620px){
+  .chatbot-rfq-form{
+    grid-template-columns:1fr;
+  }
+}
+
 .cap-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -2126,14 +2209,17 @@ select:focus-visible{
     return 'I can help with OriginCore and its services. Ask about AI agents, enterprise software, automation, integrations, technology stack, project flow, timelines, pricing approach, or how to start a project.';
   }
 
-  async function requestChatbotReply(message){
+  async function requestChatbotReply(message, history){
     const response = await fetch(`${API_BASE}/chatbot/`, {
       method:'POST',
       headers:{
         'Content-Type':'application/json',
         'Accept':'application/json'
       },
-      body:JSON.stringify({message})
+      body:JSON.stringify({
+        message,
+        history:history.slice(-12)
+      })
     });
 
     let data = null;
@@ -2145,10 +2231,43 @@ select:focus-visible{
     }
 
     if (!response.ok){
-      return data && data.reply ? data.reply : getFallbackChatbotAnswer(message);
+      return {
+        reply:data && data.reply ? data.reply : getFallbackChatbotAnswer(message),
+        rfq_ready:false,
+        rfq_summary:''
+      };
     }
 
-    return data && data.reply ? data.reply : getFallbackChatbotAnswer(message);
+    return {
+      reply:data && data.reply ? data.reply : getFallbackChatbotAnswer(message),
+      rfq_ready:Boolean(data && data.rfq_ready),
+      rfq_summary:data && data.rfq_summary ? String(data.rfq_summary) : ''
+    };
+  }
+
+  async function submitProjectInquiry(payload){
+    const response = await fetch(`${API_BASE}/inquiries/`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify(payload)
+    });
+
+    let data = null;
+
+    try{
+      data = await response.json();
+    }catch(error){
+      data = null;
+    }
+
+    if (!response.ok){
+      throw new Error(data && data.message ? data.message : 'Please add your email or phone number before sending.');
+    }
+
+    return data;
   }
 
   function setupChatbot(){
@@ -2159,10 +2278,46 @@ select:focus-visible{
     const chatbotSuggestions = document.getElementById('chatbotSuggestions');
     const chatbotSuggestionsToggle = document.getElementById('chatbotSuggestionsToggle');
     const chatbotRandomPrompt = document.getElementById('chatbotRandomPrompt');
+    const chatbotWrap = document.querySelector('.chatbot-wrap');
 
-    if (!chatbotForm || !chatbotInput || !chatbotMessages || !chatbotSend) return;
+    if (!chatbotForm || !chatbotInput || !chatbotMessages || !chatbotSend || !chatbotWrap) return;
 
     let busy = false;
+    let conversationHistory = [];
+    let latestRfqSummary = '';
+
+    const rfqPanel = document.createElement('div');
+    rfqPanel.className = 'chatbot-rfq';
+    rfqPanel.id = 'chatbotRfqPanel';
+    rfqPanel.innerHTML = `
+      <h3>Project summary ready</h3>
+      <p>I collected enough information to create a first RFQ-style project summary. Add your contact details and send it to the OriginCore team.</p>
+      <div class="chatbot-rfq-summary" id="chatbotRfqSummary"></div>
+      <form class="chatbot-rfq-form" id="chatbotRfqForm">
+        <input type="text" id="rfqName" name="name" placeholder="Your name">
+        <input type="email" id="rfqEmail" name="email" placeholder="Email address" required>
+        <input type="text" id="rfqCompany" name="company" placeholder="Company name">
+        <input type="tel" id="rfqPhone" name="phone" placeholder="Phone optional">
+        <div class="chatbot-rfq-actions">
+          <button class="btn btn-primary" type="submit">
+            Send to OriginCore team
+            <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </button>
+          <span class="chatbot-rfq-status" id="chatbotRfqStatus"></span>
+        </div>
+      </form>
+    `;
+
+    const chatbotNote = chatbotWrap.querySelector('.chatbot-note');
+    if (chatbotNote){
+      chatbotWrap.insertBefore(rfqPanel, chatbotNote);
+    }else{
+      chatbotWrap.appendChild(rfqPanel);
+    }
+
+    const rfqSummaryEl = document.getElementById('chatbotRfqSummary');
+    const rfqForm = document.getElementById('chatbotRfqForm');
+    const rfqStatus = document.getElementById('chatbotRfqStatus');
 
     function scrollChatToBottom(){
       chatbotMessages.scrollTo({
@@ -2171,12 +2326,21 @@ select:focus-visible{
       });
     }
 
-    function addMessage(text, sender){
+    function addMessage(text, sender, shouldStore = true){
       const message = document.createElement('div');
       message.className = `chatbot-message ${sender}`;
       message.innerHTML = escapeHTML(text);
       chatbotMessages.appendChild(message);
       scrollChatToBottom();
+
+      if (shouldStore && (sender === 'user' || sender === 'bot')){
+        conversationHistory.push({
+          role:sender === 'user' ? 'user' : 'assistant',
+          content:text
+        });
+        conversationHistory = conversationHistory.slice(-14);
+      }
+
       return message;
     }
 
@@ -2196,6 +2360,22 @@ select:focus-visible{
       chatbotSend.classList.toggle('ready', chatbotInput.value.trim().length > 0);
     }
 
+    function showRfqPanel(summary){
+      latestRfqSummary = summary || latestRfqSummary;
+
+      if (!latestRfqSummary) return;
+
+      rfqSummaryEl.textContent = latestRfqSummary;
+      rfqPanel.classList.add('open');
+
+      window.setTimeout(() => {
+        rfqPanel.scrollIntoView({
+          behavior:prefersReducedMotion ? 'auto' : 'smooth',
+          block:'nearest'
+        });
+      }, 120);
+    }
+
     async function submitQuestion(question){
       const cleanQuestion = question.trim().slice(0,500);
       if (!cleanQuestion || busy) return;
@@ -2212,9 +2392,14 @@ select:focus-visible{
       const typing = addTyping();
 
       try{
-        const reply = await requestChatbotReply(cleanQuestion);
+        const result = await requestChatbotReply(cleanQuestion, conversationHistory);
         typing.remove();
-        addMessage(reply, 'bot');
+
+        addMessage(result.reply, 'bot');
+
+        if (result.rfq_ready && result.rfq_summary){
+          showRfqPanel(result.rfq_summary);
+        }
       }catch(error){
         typing.remove();
         addMessage(getFallbackChatbotAnswer(cleanQuestion), 'bot');
@@ -2241,12 +2426,11 @@ select:focus-visible{
     });
 
     if (chatbotSuggestionsToggle && chatbotSuggestions){
-  chatbotSuggestionsToggle.addEventListener('click', () => {
-    const open = chatbotSuggestions.classList.toggle('open');
-    chatbotSuggestionsToggle.setAttribute('aria-expanded', String(open));
-  });
-}
-
+      chatbotSuggestionsToggle.addEventListener('click', () => {
+        const open = chatbotSuggestions.classList.toggle('open');
+        chatbotSuggestionsToggle.setAttribute('aria-expanded', String(open));
+      });
+    }
 
     if (chatbotRandomPrompt){
       chatbotRandomPrompt.addEventListener('click', () => {
@@ -2272,7 +2456,54 @@ select:focus-visible{
         });
       });
     }
+
+    if (rfqForm){
+      rfqForm.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        if (!latestRfqSummary){
+          rfqStatus.textContent = 'Please continue the chat until a project summary is ready.';
+          return;
+        }
+
+        const submitButton = rfqForm.querySelector('button[type="submit"]');
+        const name = document.getElementById('rfqName').value.trim();
+        const email = document.getElementById('rfqEmail').value.trim();
+        const company = document.getElementById('rfqCompany').value.trim();
+        const phone = document.getElementById('rfqPhone').value.trim();
+
+        if (!email && !phone){
+          rfqStatus.textContent = 'Please add an email or phone number.';
+          return;
+        }
+
+        rfqStatus.textContent = 'Sending...';
+        if (submitButton) submitButton.disabled = true;
+
+        try{
+          await submitProjectInquiry({
+            name,
+            email,
+            company,
+            phone,
+            summary:latestRfqSummary,
+            conversation:conversationHistory.map(item => `${item.role.toUpperCase()}: ${item.content}`).join('\n\n'),
+            page_url:window.location.href
+          });
+
+          rfqStatus.textContent = 'Sent successfully. OriginCore will review it.';
+          addMessage('Your project summary has been sent to the OriginCore team. We will review it and get back to you using the contact details you provided.', 'bot');
+          rfqForm.reset();
+        }catch(error){
+          rfqStatus.textContent = error.message || 'Could not send right now. Please try again.';
+        }finally{
+          if (submitButton) submitButton.disabled = false;
+        }
+      });
+    }
   }
+
+
 
   async function hydrateStats(page){
     if (!API_BASE) return;
