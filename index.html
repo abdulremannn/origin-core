@@ -2,1019 +2,1550 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0712">
+<meta name="description" content="Origin Core builds AI agents and enterprise software systems for teams that need reliable infrastructure, automation, and production-ready platforms.">
 <title>Origin Core — AI Agents &amp; Enterprise Software</title>
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#0c0712;
-    --bg-soft:#150f1f;
-    --bg-card:#1b1426;
-    --border:rgba(226,218,255,0.08);
-    --border-strong:rgba(226,218,255,0.16);
-    --text:#f5f2fb;
-    --text-dim:#a59fbb;
-    --text-faint:#655d77;
-    --accent:#ff3e7d;
-    --accent-soft:rgba(255,62,125,0.13);
-    --accent-2:#6f5cff;
-    --accent-2-soft:rgba(111,92,255,0.14);
-    --glass:rgba(34,26,48,0.46);
-    --glass-strong:rgba(40,30,56,0.6);
-    --glass-border:rgba(255,255,255,0.08);
-    --glass-highlight:rgba(255,255,255,0.06);
-    --ease:cubic-bezier(0.16,1,0.3,1);
-    --r-card:18px;
-    --r-pill:999px;
-    --maxw:1180px;
-    --display:'Space Grotesk',sans-serif;
-    --body:'IBM Plex Sans',sans-serif;
-    --mono:'IBM Plex Mono',monospace;
-  }
+:root{
+  --bg:#0c0712;
+  --bg-soft:#150f1f;
+  --bg-card:#1b1426;
+  --border:rgba(226,218,255,.08);
+  --border-strong:rgba(226,218,255,.16);
+  --text:#f5f2fb;
+  --text-dim:#a59fbb;
+  --text-faint:#655d77;
+  --accent:#ff3e7d;
+  --accent-soft:rgba(255,62,125,.13);
+  --accent-2:#6f5cff;
+  --accent-2-soft:rgba(111,92,255,.14);
+  --glass:rgba(34,26,48,.46);
+  --glass-strong:rgba(40,30,56,.64);
+  --glass-border:rgba(255,255,255,.08);
+  --glass-highlight:rgba(255,255,255,.06);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --r-card:18px;
+  --r-pill:999px;
+  --maxw:1180px;
+  --display:'Space Grotesk',sans-serif;
+  --body:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --header-h:76px;
+  --section-y:120px;
+}
 
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+*{margin:0;padding:0;box-sizing:border-box}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--header-h) + 24px);
+  background:var(--bg);
+}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(111,92,255,.08),transparent 34%),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+  position:relative;
+}
+body.menu-open{overflow:hidden}
+body::before,
+body::after{
+  content:'';
+  position:fixed;
+  z-index:-1;
+  border-radius:50%;
+  pointer-events:none;
+  filter:blur(110px);
+  opacity:.55;
+  will-change:transform;
+}
+body::before{
+  width:620px;
+  height:620px;
+  top:-220px;
+  left:-200px;
+  background:radial-gradient(circle at 50% 50%,var(--accent-2-soft),transparent 70%);
+  animation:drift-a 42s var(--ease) infinite alternate;
+}
+body::after{
+  width:680px;
+  height:680px;
+  bottom:-260px;
+  right:-200px;
+  background:radial-gradient(circle at 50% 50%,var(--accent-soft),transparent 70%);
+  animation:drift-b 50s var(--ease) infinite alternate;
+}
+@keyframes drift-a{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(70px,50px,0) scale(1.12)}
+}
+@keyframes drift-b{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(-60px,-40px,0) scale(1.08)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition-duration:.001ms!important;
+  }
+}
 
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--body);
-    font-size:16px;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-    position:relative;
-  }
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit}
+button{border:0}
+img,svg{display:block;max-width:100%}
+.wrap{
+  width:min(100%,var(--maxw));
+  margin:0 auto;
+  padding:0 32px;
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow::before{
+  content:'';
+  width:18px;
+  height:1px;
+  background:var(--accent);
+  display:inline-block;
+  flex:none;
+}
+h1,h2,h3,h4{
+  font-family:var(--display);
+  font-weight:600;
+  line-height:1.08;
+  letter-spacing:-.025em;
+}
+.lede{
+  color:var(--text-dim);
+  font-size:1.05rem;
+  max-width:46ch;
+}
 
-  body::before,
-  body::after{
-    content:'';
-    position:fixed;
-    z-index:-1;
-    border-radius:50%;
-    pointer-events:none;
-    filter:blur(110px);
-    opacity:0.55;
-    will-change:transform;
-  }
-  body::before{
-    width:620px;height:620px;
-    top:-220px; left:-200px;
-    background:radial-gradient(circle at 50% 50%, var(--accent-2-soft), transparent 70%);
-    animation:drift-a 42s var(--ease) infinite alternate;
-  }
-  body::after{
-    width:680px;height:680px;
-    bottom:-260px; right:-200px;
-    background:radial-gradient(circle at 50% 50%, var(--accent-soft), transparent 70%);
-    animation:drift-b 50s var(--ease) infinite alternate;
-  }
-  @keyframes drift-a{
-    from{ transform:translate(0,0) scale(1); }
-    to{ transform:translate(70px,50px) scale(1.12); }
-  }
-  @keyframes drift-b{
-    from{ transform:translate(0,0) scale(1); }
-    to{ transform:translate(-60px,-40px) scale(1.08); }
-  }
+.btn{
+  position:relative;
+  font-family:var(--mono);
+  font-size:13px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:14px 26px;
+  min-height:48px;
+  border-radius:var(--r-pill);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border:1px solid var(--border-strong);
+  transition:border-color .35s var(--ease),background .35s var(--ease),color .35s var(--ease),transform .35s var(--ease),box-shadow .35s var(--ease);
+  white-space:nowrap;
+  overflow:hidden;
+  isolation:isolate;
+  cursor:pointer;
+}
+.btn::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
+  transform:translateX(-120%);
+  transition:transform .7s var(--ease);
+  pointer-events:none;
+  z-index:1;
+}
+.btn:hover::before{transform:translateX(120%)}
+.btn-primary{
+  background:var(--text);
+  color:var(--bg);
+  border-color:var(--text);
+  box-shadow:0 14px 34px -24px rgba(255,255,255,.55);
+}
+.btn-primary:hover{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 16px 42px -18px rgba(255,62,125,.75);
+}
+.btn-ghost{
+  color:var(--text);
+  background:rgba(255,255,255,.015);
+}
+.btn-ghost:hover{
+  border-color:rgba(255,255,255,.4);
+  background:rgba(255,255,255,.05);
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px -14px rgba(255,255,255,.25);
+}
+.btn-arrow{transition:transform .35s var(--ease)}
+.btn:hover .btn-arrow{transform:translate(3px,-3px)}
 
-  @media (prefers-reduced-motion: reduce){
-    *{animation:none !important; transition:none !important;}
-    html{scroll-behavior:auto;}
-  }
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  background:rgba(12,7,18,.55);
+  border-bottom:1px solid var(--border);
+  transition:background .35s var(--ease),border-color .35s var(--ease),box-shadow .35s var(--ease);
+}
+header.scrolled{
+  background:rgba(12,7,18,.82);
+  border-color:rgba(226,218,255,.12);
+  box-shadow:0 18px 50px rgba(0,0,0,.22);
+}
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:var(--header-h);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family:var(--display);
+  font-weight:600;
+  font-size:1.05rem;
+  letter-spacing:.02em;
+  min-width:max-content;
+}
+.brand img{
+  width:30px;
+  height:30px;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 20px rgba(111,92,255,.18));
+}
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:clamp(20px,3vw,36px);
+  font-family:var(--mono);
+  font-size:13px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.nav-links a{
+  color:var(--text-dim);
+  position:relative;
+  padding:7px 0;
+  transition:color .2s ease;
+}
+.nav-links a:hover,
+.nav-links a.active{color:var(--text)}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:0;
+  height:1px;
+  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+  transition:width .25s ease;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after{width:100%}
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+.nav-cta{display:none}
+@media (min-width:860px){.nav-cta{display:inline-flex}}
 
-  a{color:inherit;text-decoration:none;}
-  img{display:block;max-width:100%;}
+.nav-toggle{
+  display:none;
+  width:44px;
+  height:44px;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:5px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:50%;
+  cursor:pointer;
+  color:var(--text);
+  transition:background .25s var(--ease),border-color .25s var(--ease);
+}
+.nav-toggle:hover{
+  background:rgba(255,255,255,.08);
+  border-color:var(--border-strong);
+}
+.nav-toggle span{
+  width:18px;
+  height:1px;
+  background:currentColor;
+  transition:transform .25s ease,opacity .25s ease;
+  transform-origin:center;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
-  .wrap{
-    max-width:var(--maxw);
-    margin:0 auto;
-    padding:0 32px;
-  }
+.mobile-panel{
+  position:fixed;
+  inset:var(--header-h) 0 0 0;
+  z-index:99;
+  background:
+    radial-gradient(circle at 70% 10%,rgba(255,62,125,.1),transparent 36%),
+    rgba(12,7,18,.86);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  padding:34px 32px max(32px,env(safe-area-inset-bottom));
+  transform:translateY(-8px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .28s var(--ease),transform .28s var(--ease),visibility .28s var(--ease);
+}
+.mobile-panel.open{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.mobile-panel a{
+  display:block;
+  font-family:var(--display);
+  font-size:clamp(1.35rem,7vw,2.05rem);
+  padding:15px 0;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+}
+.mobile-panel .btn{
+  margin-top:28px;
+  width:100%;
+}
+@media (max-width:859px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+}
 
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:12.5px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--accent);
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .eyebrow::before{
-    content:'';
-    width:18px;height:1px;
-    background:var(--accent);
-    display:inline-block;
-  }
+.hero{
+  position:relative;
+  padding:168px 0 92px;
+  overflow:hidden;
+}
+.hero-glow{
+  position:absolute;
+  top:-220px;
+  right:-220px;
+  width:680px;
+  height:680px;
+  background:
+    radial-gradient(circle at 50% 50%,var(--accent-soft),transparent 70%),
+    radial-gradient(circle at 38% 46%,rgba(111,92,255,.08),transparent 60%);
+  pointer-events:none;
+  filter:blur(10px);
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+  gap:64px;
+  align-items:center;
+}
+.hero-copy{
+  position:relative;
+  z-index:2;
+}
+.hero-copy h1{
+  font-size:clamp(2.72rem,5.7vw,4.55rem);
+  margin:22px 0 24px;
+  max-width:12ch;
+}
+.hero-copy h1 .accent-word{
+  background:linear-gradient(95deg,var(--accent-2),var(--accent));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.hero-copy .lede{font-size:clamp(1rem,1.6vw,1.09rem)}
+.hero-actions{
+  display:flex;
+  gap:16px;
+  margin-top:34px;
+  flex-wrap:wrap;
+}
 
-  h1,h2,h3,h4{
-    font-family:var(--display);
-    font-weight:600;
-    line-height:1.1;
-    letter-spacing:-0.01em;
-  }
+.core-visual{
+  --orbit-distance:190px;
+  position:relative;
+  width:100%;
+  max-width:440px;
+  aspect-ratio:1/1;
+  margin:0 auto;
+  transform:translateZ(0);
+}
+.core-shape{
+  position:absolute;
+  inset:0;
+  animation:core-spin 50s linear infinite;
+  filter:drop-shadow(0 0 28px rgba(111,92,255,.1));
+}
+@keyframes core-spin{to{transform:rotate(360deg)}}
+.petal{fill:url(#petalGradient)}
+.petal-outline{fill:none;stroke:var(--border-strong);stroke-width:1}
+.orbit-ring{
+  position:absolute;
+  inset:0;
+  animation:core-spin 60s linear infinite;
+}
+.orbit-item{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+}
+.orbit-item .pin{
+  transform:translate(-50%,-50%);
+  animation:core-spin-rev 60s linear infinite;
+}
+@keyframes core-spin-rev{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+.pin .chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:9px 14px;
+  border-radius:var(--r-pill);
+  border:1px solid var(--glass-border);
+  background:var(--glass-strong);
+  backdrop-filter:blur(12px) saturate(160%);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  white-space:nowrap;
+  box-shadow:0 16px 40px rgba(0,0,0,.18);
+}
+.pin .dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 14px currentColor;
+}
+.pin .dot.alt{background:var(--accent-2)}
+.orbit-item[data-angle="0"]{transform:rotate(0deg) translateX(var(--orbit-distance))}
+.orbit-item[data-angle="120"]{transform:rotate(120deg) translateX(var(--orbit-distance))}
+.orbit-item[data-angle="240"]{transform:rotate(240deg) translateX(var(--orbit-distance))}
+.core-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  pointer-events:none;
+}
+.core-center .num{
+  font-family:var(--display);
+  font-size:2.4rem;
+  font-weight:700;
+}
+.core-center .label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  margin-top:4px;
+}
 
-  .lede{
-    color:var(--text-dim);
-    font-size:1.05rem;
-    max-width:46ch;
-  }
+.marquee{
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+  padding:18px 0;
+  margin-top:92px;
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+}
+.marquee-track{
+  display:flex;
+  width:max-content;
+  gap:48px;
+  white-space:nowrap;
+  animation:marquee 38s linear infinite;
+  font-family:var(--mono);
+  font-size:13px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{
+  display:flex;
+  align-items:center;
+  gap:48px;
+}
+.marquee-track span::after{
+  content:'/';
+  color:var(--accent);
+}
+@keyframes marquee{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
 
-  /* ===== Buttons ===== */
-  .btn{
-    position:relative;
-    font-family:var(--mono);
-    font-size:13px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    padding:14px 26px;
-    border-radius:var(--r-pill);
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    border:1px solid var(--border-strong);
-    transition:border-color .35s var(--ease), background .35s var(--ease), color .35s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
-    white-space:nowrap;
-    overflow:hidden;
-    isolation:isolate;
-  }
-  .btn::before{
-    content:'';
-    position:absolute;
-    inset:0;
-    background:linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
-    transform:translateX(-120%);
-    transition:transform .7s var(--ease);
-    pointer-events:none;
-    z-index:1;
-  }
-  .btn:hover::before{ transform:translateX(120%); }
-  .btn-primary{
-    background:var(--text);
-    color:var(--bg);
-    border-color:var(--text);
-  }
-  .btn-primary:hover{
-    background:var(--accent);
-    border-color:var(--accent);
-    color:#fff;
-    transform:translateY(-2px);
-    box-shadow:0 12px 30px -10px var(--accent-soft);
-  }
-  .btn-ghost{
-    color:var(--text);
-    background:transparent;
-  }
-  .btn-ghost:hover{
-    border-color:var(--text);
-    transform:translateY(-2px);
-    box-shadow:0 12px 30px -14px rgba(255,255,255,0.25);
-  }
-  .btn-arrow{transition:transform .35s var(--ease);}
-  .btn:hover .btn-arrow{transform:translate(3px,-3px);}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--r-card);
+  overflow:hidden;
+  margin-top:60px;
+  box-shadow:0 24px 70px rgba(0,0,0,.16);
+}
+.stat{
+  background:var(--glass);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  padding:30px 26px;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+}
+.stat:hover{
+  background:var(--glass-strong);
+  transform:translateY(-2px);
+}
+.stat .num{
+  font-family:var(--display);
+  font-size:2.2rem;
+  line-height:1;
+  font-weight:700;
+}
+.stat .num span{color:var(--accent)}
+.stat .desc{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  margin-top:8px;
+}
 
-  /* ===== Nav ===== */
-  header{
-    position:fixed;
-    top:0;left:0;right:0;
-    z-index:100;
-    backdrop-filter:blur(20px) saturate(160%);
-    -webkit-backdrop-filter:blur(20px) saturate(160%);
-    background:rgba(12,7,18,0.55);
-    border-bottom:1px solid var(--border);
-    transition:background .4s var(--ease), border-color .4s var(--ease);
-  }
-  .nav{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    height:76px;
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    font-family:var(--display);
-    font-weight:600;
-    font-size:1.05rem;
-    letter-spacing:0.02em;
-  }
-  .brand img{width:30px;height:30px;}
-  .nav-links{
-    display:flex;
-    gap:36px;
-    font-family:var(--mono);
-    font-size:13px;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-  }
-  .nav-links a{
-    color:var(--text-dim);
-    position:relative;
-    padding:6px 0;
-    transition:color .2s ease;
-  }
-  .nav-links a:hover{color:var(--text);}
-  .nav-links a::after{
-    content:'';
-    position:absolute;
-    left:0;bottom:0;
-    width:0%;height:1px;
-    background:var(--accent);
-    transition:width .25s ease;
-  }
-  .nav-links a:hover::after{width:100%;}
-  .nav-right{display:flex;align-items:center;gap:18px;}
-  .nav-cta{display:none;}
-  @media (min-width:860px){ .nav-cta{display:inline-flex;} }
+section{padding:var(--section-y) 0}
+.section-head{
+  max-width:680px;
+  margin-bottom:64px;
+}
+.section-head h2{
+  font-size:clamp(2rem,4vw,2.95rem);
+  margin-top:18px;
+}
+.section-head .lede{margin-top:18px}
+.section-alt{background:linear-gradient(180deg,var(--bg-soft),rgba(21,15,31,.78))}
 
-  .nav-toggle{
-    display:none;
-    flex-direction:column;
-    gap:5px;
-    background:none;border:none;
-    cursor:pointer;
-    padding:8px;
-  }
-  .nav-toggle span{
-    width:22px;height:1px;background:var(--text);
-    transition:transform .25s ease, opacity .25s ease;
-  }
-  @media (max-width:859px){
-    .nav-links{display:none;}
-    .nav-toggle{display:flex;}
-  }
-  .mobile-panel{
-    display:none;
-    position:fixed;
-    inset:76px 0 0 0;
-    background:rgba(12,7,18,0.78);
-    backdrop-filter:blur(24px) saturate(160%);
-    -webkit-backdrop-filter:blur(24px) saturate(160%);
-    z-index:99;
-    padding:40px 32px;
-  }
-  .mobile-panel.open{display:block;}
-  .mobile-panel a{
-    display:block;
-    font-family:var(--display);
-    font-size:1.6rem;
-    padding:14px 0;
-    border-bottom:1px solid var(--border);
-    color:var(--text);
-  }
-  .mobile-panel .btn{margin-top:28px;}
+.chatbot-section{
+  position:relative;
+  padding:88px 0 112px;
+  overflow:hidden;
+}
+.chatbot-section::before{
+  content:'';
+  position:absolute;
+  inset:10% 12% auto 12%;
+  height:320px;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,62,125,.16),transparent 62%),
+    radial-gradient(circle at 30% 40%,rgba(111,92,255,.13),transparent 58%);
+  filter:blur(76px);
+  opacity:.9;
+  pointer-events:none;
+}
+.chatbot-wrap{
+  position:relative;
+  max-width:920px;
+  margin:0 auto;
+  text-align:center;
+}
+.chatbot-wrap h2{
+  font-family:var(--display);
+  font-size:clamp(34px,5vw,54px);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  margin-bottom:28px;
+  color:var(--text);
+}
+.chatbot-card{
+  position:relative;
+  min-height:132px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 50% 100%,rgba(255,62,125,.15),transparent 58%),
+    linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  overflow:hidden;
+}
+.chatbot-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,62,125,.12),transparent);
+  transform:translateX(-100%);
+  animation:chatbot-sheen 8s var(--ease) infinite;
+  pointer-events:none;
+}
+@keyframes chatbot-sheen{
+  0%,72%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+.chatbot-messages{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  max-height:340px;
+  overflow-y:auto;
+  padding:22px 22px 0;
+  text-align:left;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.22) transparent;
+  overscroll-behavior:contain;
+}
+.chatbot-message{
+  max-width:82%;
+  padding:13px 15px;
+  border-radius:16px;
+  font-size:14.5px;
+  line-height:1.55;
+  animation:chatbot-pop .28s var(--ease) both;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+}
+@keyframes chatbot-pop{
+  from{opacity:0;transform:translateY(8px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.chatbot-message.bot{
+  align-self:flex-start;
+  color:var(--text-dim);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+}
+.chatbot-message.user{
+  align-self:flex-end;
+  color:#fff;
+  background:linear-gradient(135deg,rgba(111,92,255,.42),rgba(255,62,125,.36));
+  border:1px solid rgba(255,255,255,.12);
+}
+.chatbot-message.typing{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  width:max-content;
+  white-space:normal;
+}
+.typing-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--text-faint);
+  animation:typing-bounce 1s ease-in-out infinite;
+}
+.typing-dot:nth-child(2){animation-delay:.12s}
+.typing-dot:nth-child(3){animation-delay:.24s}
+@keyframes typing-bounce{
+  0%,80%,100%{transform:translateY(0);opacity:.45}
+  40%{transform:translateY(-4px);opacity:1}
+}
+.chatbot-input-row{
+  position:relative;
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr) 52px auto;
+  gap:12px;
+  align-items:end;
+  padding:22px;
+}
+.chatbot-control{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.055);
+  color:var(--text);
+  cursor:pointer;
+  transition:transform .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease),opacity .25s var(--ease);
+}
+.chatbot-control:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,255,255,.22);
+  background:rgba(255,255,255,.09);
+}
+.chatbot-control svg{
+  width:20px;
+  height:20px;
+}
+.chatbot-field{
+  width:100%;
+  min-height:50px;
+  max-height:150px;
+  resize:none;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.5;
+  padding:12px 0 8px;
+  overflow-y:auto;
+}
+.chatbot-field::placeholder{color:rgba(245,242,251,.38)}
+.chatbot-send{
+  min-height:50px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border:0;
+  border-radius:999px;
+  padding:0 24px;
+  background:rgba(255,255,255,.075);
+  color:rgba(245,242,251,.78);
+  font-family:var(--display);
+  font-size:15.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .25s var(--ease),background .25s var(--ease),color .25s var(--ease),opacity .25s var(--ease);
+}
+.chatbot-send:hover,
+.chatbot-send.ready{
+  transform:translateY(-2px);
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent-2),var(--accent));
+}
+.chatbot-send:disabled,
+.chatbot-control:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+  transform:none;
+}
+.chatbot-send svg{
+  width:17px;
+  height:17px;
+}
+.chatbot-suggestions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  padding:0 22px;
+  transform:translateY(-8px);
+  pointer-events:none;
+  transition:
+    max-height .35s var(--ease),
+    opacity .25s var(--ease),
+    transform .25s var(--ease),
+    padding .35s var(--ease);
+}
 
-  /* ===== Hero ===== */
-  .hero{
-    position:relative;
-    padding:170px 0 90px;
-    overflow:hidden;
-  }
-  .hero-glow{
-    position:absolute;
-    top:-220px; right:-220px;
-    width:680px;height:680px;
-    background:radial-gradient(circle at 50% 50%, var(--accent-soft), transparent 70%);
-    pointer-events:none;
-    filter:blur(10px);
-  }
+.chatbot-suggestions.open{
+  max-height:180px;
+  opacity:1;
+  padding:0 22px 20px;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.chatbot-chip{
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:999px;
+  background:rgba(255,255,255,.055);
+  color:var(--text-dim);
+  padding:9px 13px;
+  font-family:var(--mono);
+  font-size:12px;
+  cursor:pointer;
+  transition:color .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease);
+}
+.chatbot-chip:hover{
+  color:var(--text);
+  border-color:rgba(255,62,125,.35);
+  background:rgba(255,62,125,.1);
+  transform:translateY(-1px);
+}
+.chatbot-note{
+  margin-top:18px;
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.04em;
+}
+
+.cap-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--r-card);
+  overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.12);
+}
+.cap-card{
+  background:var(--glass);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  padding:38px 32px;
+  transition:background .4s var(--ease),transform .4s var(--ease),box-shadow .4s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.cap-card::before,
+.why-card::before,
+.testimonial::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.08),transparent 34%);
+  opacity:0;
+  transition:opacity .3s var(--ease);
+  pointer-events:none;
+}
+.cap-card:hover::before,
+.why-card:hover::before,
+.testimonial:hover::before{opacity:1}
+.cap-card:hover{
+  background:var(--glass-strong);
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px -24px rgba(0,0,0,.6);
+  z-index:1;
+}
+.cap-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--accent-soft);
+  color:var(--accent);
+  margin-bottom:22px;
+  transition:transform .4s var(--ease);
+}
+.cap-card:hover .cap-icon{transform:scale(1.08) rotate(-4deg)}
+.cap-card:nth-child(2n) .cap-icon{background:var(--accent-2-soft);color:var(--accent-2)}
+.cap-card h3{font-size:1.18rem;margin-bottom:10px;position:relative}
+.cap-card p{color:var(--text-dim);font-size:.96rem;position:relative}
+
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:72px;
+  align-items:center;
+}
+.split.reverse .split-visual{order:2}
+.split.reverse .split-copy{order:1}
+.feature-list{
+  margin-top:32px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.feature-item{
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+}
+.feature-mark{
+  flex:none;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:1px solid var(--border-strong);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:2px;
+  color:var(--accent-2);
+  transition:transform .4s var(--ease),border-color .4s var(--ease),color .4s var(--ease),box-shadow .4s var(--ease);
+}
+.feature-item:hover .feature-mark{
+  transform:scale(1.12);
+  border-color:var(--accent-2);
+  color:var(--accent-2);
+  box-shadow:0 0 0 6px rgba(111,92,255,.08);
+}
+.feature-mark svg{width:12px;height:12px}
+.feature-item h4{font-size:1rem;font-weight:600;margin-bottom:4px}
+.feature-item p{color:var(--text-dim);font-size:.94rem}
+
+.loop-diagram{
+  position:relative;
+  width:100%;
+  max-width:440px;
+  aspect-ratio:1/1;
+  margin:0 auto;
+}
+.loop-ring{
+  position:absolute;
+  inset:8%;
+  border:1px dashed var(--border-strong);
+  border-radius:50%;
+  animation:pulse-ring 5s ease-in-out infinite;
+}
+@keyframes pulse-ring{
+  0%,100%{opacity:.65;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.015)}
+}
+.loop-node{
+  position:absolute;
+  width:130px;
+  padding:18px;
+  border:1px solid var(--glass-border);
+  border-radius:var(--r-card);
+  background:var(--glass);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  text-align:left;
+  transition:transform .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease);
+}
+.loop-node:hover{
+  background:var(--glass-strong);
+  box-shadow:0 16px 32px -20px rgba(0,0,0,.55);
+}
+.loop-node .tag{
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.loop-node h4{font-size:1rem;margin-top:6px}
+.loop-node p{font-size:.82rem;color:var(--text-dim);margin-top:4px}
+.loop-node.n1{top:0;left:50%;transform:translateX(-50%)}
+.loop-node.n1:hover{transform:translateX(-50%) translateY(-4px)}
+.loop-node.n2{bottom:6%;right:0}
+.loop-node.n2:hover{transform:translateY(-4px)}
+.loop-node.n3{bottom:6%;left:0}
+.loop-node.n3:hover{transform:translateY(-4px)}
+.loop-node.n2 .tag,
+.loop-node.n3 .tag{color:var(--accent-2)}
+.loop-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.loop-center img{
+  width:64px;
+  height:64px;
+  object-fit:contain;
+  opacity:.9;
+  filter:drop-shadow(0 12px 28px rgba(255,62,125,.16));
+}
+
+.stack-diagram{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  max-width:440px;
+  margin:0 auto;
+}
+.stack-layer{
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  padding:20px 24px;
+  background:var(--glass);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  transition:transform .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease),box-shadow .4s var(--ease);
+}
+.stack-layer:hover{
+  background:var(--glass-strong);
+  transform:translateX(6px);
+  box-shadow:0 18px 34px -26px rgba(0,0,0,.65);
+}
+.stack-layer .name{font-weight:600;font-size:.98rem}
+.stack-layer .tag{
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  border:1px solid var(--border-strong);
+  border-radius:var(--r-pill);
+  padding:5px 12px;
+  white-space:nowrap;
+}
+.stack-layer:nth-child(1){margin-left:0}
+.stack-layer:nth-child(2){margin-left:18px}
+.stack-layer:nth-child(3){margin-left:36px}
+.stack-layer:nth-child(4){margin-left:54px;border-color:var(--accent)}
+.stack-layer:nth-child(4) .tag{color:var(--accent);border-color:var(--accent)}
+
+.check-list{
+  margin-top:30px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.check-item{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  font-size:.95rem;
+  color:var(--text-dim);
+}
+.check-item svg{
+  flex:none;
+  margin-top:3px;
+  color:var(--accent-2);
+}
+
+.process-track{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:24px;
+  position:relative;
+}
+.process-track::before{
+  content:'';
+  position:absolute;
+  top:18px;
+  left:0;
+  right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-strong),transparent);
+  z-index:0;
+}
+.process-step{
+  position:relative;
+  z-index:1;
+}
+.process-num{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:var(--bg);
+  border:1px solid var(--border-strong);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--accent);
+  margin-bottom:20px;
+  flex:none;
+  transition:transform .4s var(--ease),border-color .4s var(--ease),box-shadow .4s var(--ease);
+}
+.process-step:hover .process-num{
+  transform:scale(1.1);
+  border-color:var(--accent);
+  box-shadow:0 0 0 6px var(--accent-soft);
+}
+.process-step h4{font-size:1.08rem;margin-bottom:8px}
+.process-step p{font-size:.92rem;color:var(--text-dim)}
+
+.why-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:36px;
+}
+.why-card{
+  padding:28px;
+  border-radius:var(--r-card);
+  background:var(--glass);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid var(--glass-border);
+  transition:transform .4s var(--ease),background .4s var(--ease),box-shadow .4s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.why-card:hover{
+  background:var(--glass-strong);
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px -24px rgba(0,0,0,.6);
+}
+.why-card h3{
+  font-size:1.2rem;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  position:relative;
+}
+.why-card .why-icon{
+  flex:none;
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  border:1px solid var(--border-strong);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--accent);
+  transition:transform .4s var(--ease),border-color .4s var(--ease);
+}
+.why-card:hover .why-icon{
+  transform:scale(1.08) rotate(-4deg);
+  border-color:var(--accent);
+}
+.why-card p{
+  color:var(--text-dim);
+  font-size:.95rem;
+  position:relative;
+}
+
+.testimonial-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--r-card);
+  overflow:hidden;
+}
+.testimonial{
+  background:var(--glass);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  padding:34px 30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:24px;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.testimonial:hover{
+  background:var(--glass-strong);
+  transform:translateY(-4px);
+  z-index:1;
+}
+.testimonial p.quote{
+  font-size:1.02rem;
+  line-height:1.65;
+  position:relative;
+}
+.testimonial .who{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  border-top:1px solid var(--border);
+  padding-top:16px;
+  position:relative;
+}
+.testimonial .who strong{
+  color:var(--text);
+  display:block;
+  font-family:var(--body);
+  font-size:.95rem;
+  text-transform:none;
+  letter-spacing:0;
+  margin-bottom:2px;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:64px;
+}
+.contact-info{
+  border:1px solid var(--glass-border);
+  border-radius:var(--r-card);
+  padding:40px;
+  background:var(--glass);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  position:relative;
+  overflow:hidden;
+  height:max-content;
+}
+.contact-info::before{
+  content:'';
+  position:absolute;
+  width:200px;
+  height:200px;
+  left:-70px;
+  top:-70px;
+  background:radial-gradient(circle,var(--accent-2-soft),transparent 70%);
+  pointer-events:none;
+}
+.contact-info::after{
+  content:'';
+  position:absolute;
+  width:240px;
+  height:240px;
+  right:-80px;
+  bottom:-80px;
+  background:radial-gradient(circle,var(--accent-soft),transparent 70%);
+  pointer-events:none;
+}
+.contact-info>*{position:relative}
+.contact-info h3{font-size:1.5rem;margin-bottom:18px}
+.contact-line{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:22px;
+  font-size:.95rem;
+}
+.contact-line .label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+}
+.contact-line a{
+  color:var(--text);
+  transition:color .2s ease;
+}
+.contact-line a:hover{color:var(--accent)}
+
+form{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.field label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+}
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  background:rgba(21,16,32,.45);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--border-strong);
+  border-radius:10px;
+  padding:14px 16px;
+  color:var(--text);
+  font-family:var(--body);
+  font-size:.95rem;
+  transition:border-color .35s var(--ease),background .35s var(--ease),box-shadow .35s var(--ease);
+}
+.field textarea{
+  resize:vertical;
+  min-height:120px;
+}
+.field select{
+  appearance:none;
+  background-image:
+    linear-gradient(45deg,transparent 50%,var(--text-dim) 50%),
+    linear-gradient(135deg,var(--text-dim) 50%,transparent 50%);
+  background-position:
+    calc(100% - 20px) 50%,
+    calc(100% - 14px) 50%;
+  background-size:6px 6px,6px 6px;
+  background-repeat:no-repeat;
+  padding-right:42px;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  outline:none;
+  border-color:var(--accent);
+  background:rgba(27,20,38,.65);
+  box-shadow:0 0 0 4px var(--accent-soft);
+}
+.field input::placeholder,
+.field textarea::placeholder{color:rgba(165,159,187,.56)}
+.form-note{
+  font-size:.82rem;
+  color:var(--text-faint);
+}
+.form-success{
+  display:none;
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--accent-2);
+  padding:14px 0;
+}
+.form-success.show{display:block}
+
+footer{
+  border-top:1px solid var(--border);
+  padding:64px 0 32px;
+}
+.footer-top{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:48px;
+  padding-bottom:48px;
+}
+.footer-brand .brand{margin-bottom:14px}
+.footer-brand p{
+  color:var(--text-dim);
+  font-size:.92rem;
+  max-width:32ch;
+}
+.footer-col h5{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+  margin-bottom:18px;
+}
+.footer-col a,
+.footer-col span{
+  display:block;
+  color:var(--text-dim);
+  font-size:.92rem;
+  margin-bottom:12px;
+  transition:color .2s ease;
+}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{
+  border-top:1px solid var(--border);
+  padding-top:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease);
+  will-change:opacity,transform;
+}
+.reveal.in-view{
+  opacity:1;
+  transform:translateY(0);
+}
+.cap-grid .reveal:nth-child(2){transition-delay:.08s}
+.cap-grid .reveal:nth-child(3){transition-delay:.16s}
+.cap-grid .reveal:nth-child(4){transition-delay:.04s}
+.cap-grid .reveal:nth-child(5){transition-delay:.12s}
+.cap-grid .reveal:nth-child(6){transition-delay:.2s}
+.why-grid .reveal:nth-child(2){transition-delay:.1s}
+.why-grid .reveal:nth-child(3){transition-delay:.2s}
+.testimonial-grid .reveal:nth-child(2){transition-delay:.1s}
+.testimonial-grid .reveal:nth-child(3){transition-delay:.2s}
+.stats .reveal:nth-child(2){transition-delay:.06s}
+.stats .reveal:nth-child(3){transition-delay:.12s}
+.stats .reveal:nth-child(4){transition-delay:.18s}
+.process-track .reveal:nth-child(2){transition-delay:.08s}
+.process-track .reveal:nth-child(3){transition-delay:.16s}
+.process-track .reveal:nth-child(4){transition-delay:.24s}
+.process-track .reveal:nth-child(5){transition-delay:.32s}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:not(.chatbot-field):focus-visible,
+select:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+
+.chatbot-field:focus,
+.chatbot-field:focus-visible{
+  outline:none;
+  box-shadow:none;
+}
+
+@media (max-width:1080px){
+  .hero-grid{gap:48px}
+  .core-visual{--orbit-distance:170px}
+  .nav-links{gap:22px}
+}
+@media (max-width:980px){
+  :root{--section-y:104px}
   .hero-grid{
-    display:grid;
-    grid-template-columns:1.15fr 0.85fr;
-    gap:60px;
-    align-items:center;
+    grid-template-columns:1fr;
+    gap:68px;
   }
-  @media (max-width:980px){
-    .hero-grid{grid-template-columns:1fr; gap:64px;}
-  }
-  .hero-copy h1{
-    font-size:clamp(2.6rem, 5.6vw, 4.4rem);
-    margin:22px 0 24px;
-  }
-  .hero-copy h1 .accent-word{
-    background:linear-gradient(95deg, var(--accent-2), var(--accent));
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  .hero-actions{
-    display:flex;
-    gap:16px;
-    margin-top:34px;
-    flex-wrap:wrap;
-  }
-
-  /* core visual */
+  .hero-copy h1{max-width:13ch}
   .core-visual{
-    position:relative;
-    width:100%;
-    max-width:440px;
-    aspect-ratio:1/1;
-    margin:0 auto;
+    max-width:410px;
+    --orbit-distance:174px;
   }
-  .core-shape{
-    position:absolute;
-    inset:0;
-    animation:core-spin 50s linear infinite;
-  }
-  @keyframes core-spin{ to{ transform:rotate(360deg); } }
-  .petal{ fill:url(#petalGradient); }
-  .petal-outline{ fill:none; stroke:var(--border-strong); stroke-width:1; }
-
-  .orbit-ring{
-    position:absolute;
-    inset:0;
-    animation:core-spin 60s linear infinite;
-  }
-  .orbit-item{
-    position:absolute;
-    top:50%; left:50%;
-    width:0; height:0;
-  }
-  .orbit-item .pin{
-    transform:translate(-50%,-50%);
-    animation:core-spin-rev 60s linear infinite;
-  }
-  @keyframes core-spin-rev{ to{ transform:translate(-50%,-50%) rotate(-360deg); } }
-  .pin .chip{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-family:var(--mono);
-    font-size:11.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    padding:9px 14px;
-    border-radius:var(--r-pill);
-    border:1px solid var(--glass-border);
-    background:var(--glass-strong);
-    backdrop-filter:blur(12px) saturate(160%);
-    -webkit-backdrop-filter:blur(12px) saturate(160%);
-    white-space:nowrap;
-  }
-  .pin .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
-  .pin .dot.alt{background:var(--accent-2);}
-
-  .orbit-item[data-angle="0"]{ transform:rotate(0deg) translateX(190px); }
-  .orbit-item[data-angle="120"]{ transform:rotate(120deg) translateX(190px); }
-  .orbit-item[data-angle="240"]{ transform:rotate(240deg) translateX(190px); }
-  @media (max-width:520px){
-    .orbit-item[data-angle="0"]{ transform:rotate(0deg) translateX(135px); }
-    .orbit-item[data-angle="120"]{ transform:rotate(120deg) translateX(135px); }
-    .orbit-item[data-angle="240"]{ transform:rotate(240deg) translateX(135px); }
-  }
-  .core-center{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    text-align:center;
-  }
-  .core-center .num{
-    font-family:var(--display);
-    font-size:2.4rem;
-    font-weight:700;
-  }
-  .core-center .label{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--text-dim);
-    margin-top:4px;
-  }
-
-  /* marquee */
-  .marquee{
-    border-top:1px solid var(--border);
-    border-bottom:1px solid var(--border);
-    overflow:hidden;
-    padding:18px 0;
-    margin-top:90px;
-  }
-  .marquee-track{
-    display:flex;
-    gap:48px;
-    white-space:nowrap;
-    animation:marquee 38s linear infinite;
-    font-family:var(--mono);
-    font-size:13px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--text-faint);
-  }
-  .marquee-track span{display:flex;align-items:center;gap:48px;}
-  .marquee-track span::after{content:'/';color:var(--accent);}
-  @keyframes marquee{
-    from{transform:translateX(0);}
-    to{transform:translateX(-50%);}
-  }
-
-  /* stats strip */
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:1px;
-    background:var(--border);
-    border:1px solid var(--border);
-    border-radius:var(--r-card);
-    overflow:hidden;
-    margin-top:60px;
-  }
-  @media (max-width:760px){ .stats{grid-template-columns:repeat(2,1fr);} }
-  .stat{
-    background:var(--glass);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    padding:30px 26px;
-    transition:background .4s var(--ease);
-  }
-  .stat:hover{
-    background:var(--glass-strong);
-  }
-  .stat .num{
-    font-family:var(--display);
-    font-size:2.2rem;
-    font-weight:700;
-  }
-  .stat .num span{color:var(--accent);}
-  .stat .desc{
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--text-dim);
-    margin-top:6px;
-  }
-
-  /* ===== generic section ===== */
-  section{ padding:120px 0; }
-  .section-head{
-    max-width:680px;
-    margin-bottom:64px;
-  }
-  .section-head h2{
-    font-size:clamp(2rem, 4vw, 2.9rem);
-    margin-top:18px;
-  }
-  .section-head .lede{ margin-top:18px; }
-  .section-alt{ background:var(--bg-soft); }
-
-  /* ===== capabilities grid ===== */
-  .cap-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:1px;
-    background:var(--border);
-    border:1px solid var(--border);
-    border-radius:var(--r-card);
-    overflow:hidden;
-  }
-  @media (max-width:980px){ .cap-grid{grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:620px){ .cap-grid{grid-template-columns:1fr;} }
-  .cap-card{
-    background:var(--glass);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    padding:38px 32px;
-    transition:background .4s var(--ease), transform .4s var(--ease), box-shadow .4s var(--ease);
-    position:relative;
-  }
-  .cap-card:hover{
-    background:var(--glass-strong);
-    transform:translateY(-4px);
-    box-shadow:0 20px 40px -24px rgba(0,0,0,0.6);
-    z-index:1;
-  }
-  .cap-icon{
-    width:42px;height:42px;
-    border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    background:var(--accent-soft);
-    color:var(--accent);
-    margin-bottom:22px;
-    transition:transform .4s var(--ease);
-  }
-  .cap-card:hover .cap-icon{ transform:scale(1.08) rotate(-4deg); }
-  .cap-card:nth-child(2n) .cap-icon{
-    background:var(--accent-2-soft);
-    color:var(--accent-2);
-  }
-  .cap-card h3{
-    font-size:1.18rem;
-    margin-bottom:10px;
-  }
-  .cap-card p{
-    color:var(--text-dim);
-    font-size:0.96rem;
-  }
-
-  /* ===== feature split (AI agents / enterprise) ===== */
   .split{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:72px;
-    align-items:center;
+    grid-template-columns:1fr;
+    gap:58px;
   }
-  @media (max-width:940px){
-    .split{grid-template-columns:1fr; gap:56px;}
-    .split.reverse .split-visual{order:-1;}
+  .split.reverse .split-visual{order:-1}
+  .split.reverse .split-copy{order:1}
+  .process-track{
+    grid-template-columns:1fr;
+    gap:0;
   }
-  .split.reverse .split-visual{order:2;}
-  .split.reverse .split-copy{order:1;}
-
-  .feature-list{
-    margin-top:32px;
+  .process-track::before{display:none}
+  .process-step{
     display:flex;
-    flex-direction:column;
-    gap:22px;
+    gap:24px;
+    padding:24px 0;
+    border-bottom:1px solid var(--border);
   }
-  .feature-item{
-    display:flex;
-    gap:18px;
-    align-items:flex-start;
+  .process-step:last-child{border-bottom:none}
+  .process-num{margin-bottom:0}
+  .contact-grid{
+    grid-template-columns:1fr;
+    gap:48px;
   }
-  .feature-mark{
-    flex:none;
-    width:28px;height:28px;
-    border-radius:50%;
-    border:1px solid var(--border-strong);
-    display:flex;align-items:center;justify-content:center;
-    margin-top:2px;
-    color:var(--accent-2);
-    transition:transform .4s var(--ease), border-color .4s var(--ease), color .4s var(--ease);
+}
+@media (max-width:900px){
+  .testimonial-grid{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .why-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr;gap:36px}
+}
+@media (max-width:760px){
+  :root{
+    --section-y:88px;
+    --header-h:72px;
   }
-  .feature-item:hover .feature-mark{
-    transform:scale(1.12);
-    border-color:var(--accent-2);
-    color:var(--accent-2);
-  }
-  .feature-mark svg{width:12px;height:12px;}
-  .feature-item h4{
-    font-size:1rem;
-    font-weight:600;
-    margin-bottom:4px;
-  }
-  .feature-item p{
-    color:var(--text-dim);
-    font-size:0.94rem;
-  }
-
-  /* loop diagram */
-  .loop-diagram{
-    position:relative;
-    width:100%;
-    max-width:440px;
-    aspect-ratio:1/1;
-    margin:0 auto;
-  }
-  .loop-ring{
-    position:absolute;
-    inset:8%;
-    border:1px dashed var(--border-strong);
-    border-radius:50%;
-  }
-  .loop-node{
-    position:absolute;
-    width:130px;
+  .wrap{padding:0 24px}
+  .hero{padding:136px 0 78px}
+  .hero-copy h1{font-size:clamp(2.45rem,12vw,3.65rem)}
+  .hero-actions .btn{width:100%}
+  .stats{grid-template-columns:repeat(2,1fr);margin-top:46px}
+  .stat{padding:24px 20px}
+  .stat .num{font-size:1.95rem}
+  .marquee{margin-top:70px}
+  .chatbot-section{padding:72px 0 88px}
+  .chatbot-input-row{
+    grid-template-columns:48px minmax(0,1fr) 48px;
+    gap:10px;
     padding:18px;
-    border:1px solid var(--glass-border);
-    border-radius:var(--r-card);
-    background:var(--glass);
-    backdrop-filter:blur(16px) saturate(160%);
-    -webkit-backdrop-filter:blur(16px) saturate(160%);
-    text-align:left;
-    transition:transform .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
   }
-  .loop-node:hover{
-    background:var(--glass-strong);
-    transform:translateY(-4px);
-    box-shadow:0 16px 32px -20px rgba(0,0,0,0.55);
+  .chatbot-send{
+    grid-column:1/-1;
+    width:100%;
   }
-  .loop-node .tag{
-    font-family:var(--mono);
-    font-size:10.5px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--accent);
+  .chatbot-message{max-width:94%}
+  .chatbot-wrap h2{margin-bottom:22px}
+  .cap-grid{grid-template-columns:1fr}
+  .section-head{margin-bottom:46px}
+}
+@media (max-width:620px){
+  .form-row{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{align-items:flex-start;flex-direction:column}
+  .core-visual{
+    max-width:330px;
+    --orbit-distance:135px;
   }
-  .loop-node h4{font-size:1rem; margin-top:6px;}
-  .loop-node p{font-size:0.82rem; color:var(--text-dim); margin-top:4px;}
-  .loop-node.n1{ top:0; left:50%; transform:translateX(-50%); }
-  .loop-node.n2{ bottom:6%; right:0; }
-  .loop-node.n3{ bottom:6%; left:0; }
-  .loop-node.n2 .tag, .loop-node.n3 .tag{ color:var(--accent-2); }
-  .loop-center{
-    position:absolute;
-    inset:0;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .loop-center img{ width:64px; opacity:0.9; }
-  @media (max-width:520px){
-    .loop-node{width:108px; padding:14px;}
-  }
-
-  /* architecture stack diagram */
-  .stack-diagram{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-    max-width:440px;
-    margin:0 auto;
+  .pin .chip{
+    font-size:10px;
+    padding:8px 11px;
   }
   .stack-layer{
-    border:1px solid var(--glass-border);
-    border-radius:14px;
-    padding:20px 24px;
-    background:var(--glass);
-    backdrop-filter:blur(16px) saturate(160%);
-    -webkit-backdrop-filter:blur(16px) saturate(160%);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    transition:transform .4s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
-  }
-  .stack-layer:hover{
-    background:var(--glass-strong);
-    transform:translateX(6px);
-  }
-  .stack-layer .name{font-weight:600; font-size:0.98rem;}
-  .stack-layer .tag{
-    font-family:var(--mono);
-    font-size:10.5px;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:var(--text-dim);
-    border:1px solid var(--border-strong);
-    border-radius:var(--r-pill);
-    padding:5px 12px;
-  }
-  .stack-layer:nth-child(1){ margin-left:0; }
-  .stack-layer:nth-child(2){ margin-left:18px; }
-  .stack-layer:nth-child(3){ margin-left:36px; }
-  .stack-layer:nth-child(4){ margin-left:54px; border-color:var(--accent); }
-  .stack-layer:nth-child(4) .tag{ color:var(--accent); border-color:var(--accent); }
-  @media (max-width:520px){
-    .stack-layer:nth-child(2){margin-left:10px;}
-    .stack-layer:nth-child(3){margin-left:20px;}
-    .stack-layer:nth-child(4){margin-left:30px;}
-  }
-
-  .check-list{
-    margin-top:30px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-  }
-  .check-item{
-    display:flex;
-    gap:12px;
+    padding:18px;
     align-items:flex-start;
-    font-size:0.95rem;
-    color:var(--text-dim);
-  }
-  .check-item svg{ flex:none; margin-top:3px; color:var(--accent-2); }
-
-  /* ===== process ===== */
-  .process-track{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:24px;
-    position:relative;
-  }
-  .process-track::before{
-    content:'';
-    position:absolute;
-    top:18px; left:0; right:0;
-    height:1px;
-    background:var(--border-strong);
-    z-index:0;
-  }
-  @media (max-width:980px){
-    .process-track{grid-template-columns:1fr; gap:0;}
-    .process-track::before{ display:none; }
-  }
-  .process-step{
-    position:relative;
-    z-index:1;
-  }
-  @media (max-width:980px){
-    .process-step{
-      display:flex;
-      gap:24px;
-      padding:24px 0;
-      border-bottom:1px solid var(--border);
-    }
-    .process-step:last-child{border-bottom:none;}
-  }
-  .process-num{
-    width:38px;height:38px;
-    border-radius:50%;
-    background:var(--bg);
-    border:1px solid var(--border-strong);
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--mono);
-    font-size:13px;
-    color:var(--accent);
-    margin-bottom:20px;
-    flex:none;
-    transition:transform .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease);
-  }
-  .process-step:hover .process-num{
-    transform:scale(1.1);
-    border-color:var(--accent);
-    box-shadow:0 0 0 6px var(--accent-soft);
-  }
-  .process-step h4{ font-size:1.08rem; margin-bottom:8px; }
-  .process-step p{ font-size:0.92rem; color:var(--text-dim); }
-
-  /* ===== why / values ===== */
-  .why-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:36px;
-  }
-  @media (max-width:860px){ .why-grid{grid-template-columns:1fr;} }
-  .why-card{
-    padding:28px;
-    border-radius:var(--r-card);
-    background:var(--glass);
-    backdrop-filter:blur(16px) saturate(160%);
-    -webkit-backdrop-filter:blur(16px) saturate(160%);
-    border:1px solid var(--glass-border);
-    transition:transform .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
-  }
-  .why-card:hover{
-    background:var(--glass-strong);
-    transform:translateY(-4px);
-    box-shadow:0 20px 40px -24px rgba(0,0,0,0.6);
-  }
-  .why-card h3{ font-size:1.2rem; margin-bottom:12px; display:flex; align-items:center; gap:12px; }
-  .why-card .why-icon{
-    width:40px;height:40px;
-    border-radius:10px;
-    border:1px solid var(--border-strong);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--accent);
-    transition:transform .4s var(--ease), border-color .4s var(--ease);
-  }
-  .why-card:hover .why-icon{
-    transform:scale(1.08) rotate(-4deg);
-    border-color:var(--accent);
-  }
-  .why-card p{ color:var(--text-dim); font-size:0.95rem; }
-
-  /* ===== testimonials ===== */
-  .testimonial-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:1px;
-    background:var(--border);
-    border:1px solid var(--border);
-    border-radius:var(--r-card);
-    overflow:hidden;
-  }
-  @media (max-width:900px){ .testimonial-grid{grid-template-columns:1fr;} }
-  .testimonial{
-    background:var(--glass);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    padding:34px 30px;
-    display:flex;
     flex-direction:column;
-    justify-content:space-between;
-    gap:24px;
-    transition:background .4s var(--ease), transform .4s var(--ease);
   }
-  .testimonial:hover{
-    background:var(--glass-strong);
-    transform:translateY(-4px);
-    z-index:1;
+  .stack-layer:nth-child(2){margin-left:10px}
+  .stack-layer:nth-child(3){margin-left:20px}
+  .stack-layer:nth-child(4){margin-left:30px}
+}
+@media (max-width:520px){
+  .wrap{padding:0 18px}
+  .eyebrow{font-size:11.5px;letter-spacing:.14em}
+  .core-visual{
+    max-width:292px;
+    --orbit-distance:116px;
   }
-  .testimonial p.quote{
-    font-size:1.02rem;
-    line-height:1.65;
+  .loop-node{
+    width:112px;
+    padding:13px;
   }
-  .testimonial .who{
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--text-dim);
-    border-top:1px solid var(--border);
-    padding-top:16px;
+  .loop-node p{font-size:.76rem}
+  .loop-node h4{font-size:.92rem}
+  .contact-info{padding:28px}
+  .chatbot-card{border-radius:18px}
+  .chatbot-messages{padding:18px 18px 0}
+  .chatbot-suggestions{padding:0 18px}
+  .chatbot-suggestions.open{padding:0 18px 18px}
+  .mobile-panel{padding-inline:22px}
+}
+@media (max-width:380px){
+  .hero-copy h1{font-size:2.25rem}
+  .btn{padding-inline:20px}
+  .stats{grid-template-columns:1fr}
+  .core-visual{
+    max-width:260px;
+    --orbit-distance:104px;
   }
-  .testimonial .who strong{ color:var(--text); display:block; font-family:var(--body); font-size:0.95rem; text-transform:none; letter-spacing:0; margin-bottom:2px; }
-
-  /* ===== CTA / contact ===== */
-  .contact-grid{
-    display:grid;
-    grid-template-columns:0.9fr 1.1fr;
-    gap:64px;
+  .loop-node{
+    width:102px;
+    padding:11px;
   }
-  @media (max-width:940px){ .contact-grid{grid-template-columns:1fr; gap:48px;} }
-  .contact-info{
-    border:1px solid var(--glass-border);
-    border-radius:var(--r-card);
-    padding:40px;
-    background:var(--glass);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    position:relative;
-    overflow:hidden;
-  }
-  .contact-info::before{
-    content:'';
-    position:absolute;
-    width:200px;height:200px;
-    left:-70px; top:-70px;
-    background:radial-gradient(circle, var(--accent-2-soft), transparent 70%);
-    pointer-events:none;
-  }
-  .contact-info::after{
-    content:'';
-    position:absolute;
-    width:240px;height:240px;
-    right:-80px; bottom:-80px;
-    background:radial-gradient(circle, var(--accent-soft), transparent 70%);
-    pointer-events:none;
-  }
-  .contact-info h3{ font-size:1.5rem; margin-bottom:18px; }
-  .contact-line{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-top:22px;
-    font-size:0.95rem;
-  }
-  .contact-line .label{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--text-dim);
-  }
-  .contact-line a{ color:var(--text); transition:color .2s ease; }
-  .contact-line a:hover{ color:var(--accent); }
-
-  form{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-  }
-  .form-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-  }
-  @media (max-width:560px){ .form-row{grid-template-columns:1fr;} }
-  .field{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
-  .field label{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--text-dim);
-  }
-  .field input, .field textarea, .field select{
-    background:rgba(21,16,32,0.45);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    border:1px solid var(--border-strong);
-    border-radius:10px;
-    padding:14px 16px;
-    color:var(--text);
-    font-family:var(--body);
-    font-size:0.95rem;
-    transition:border-color .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease);
-  }
-  .field textarea{ resize:vertical; min-height:120px; }
-  .field input:focus, .field textarea:focus, .field select:focus{
-    outline:none;
-    border-color:var(--accent);
-    background:rgba(27,20,38,0.65);
-    box-shadow:0 0 0 4px var(--accent-soft);
-  }
-  .form-note{
-    font-size:0.82rem;
-    color:var(--text-faint);
-  }
-  .form-success{
-    display:none;
-    font-family:var(--mono);
-    font-size:13px;
-    color:var(--accent-2);
-    padding:14px 0;
-  }
-  .form-success.show{ display:block; }
-
-  /* ===== footer ===== */
-  footer{
-    border-top:1px solid var(--border);
-    padding:64px 0 32px;
-  }
-  .footer-top{
-    display:grid;
-    grid-template-columns:1.4fr 1fr 1fr 1fr;
-    gap:48px;
-    padding-bottom:48px;
-  }
-  @media (max-width:860px){
-    .footer-top{grid-template-columns:1fr 1fr; gap:36px;}
-  }
-  @media (max-width:560px){
-    .footer-top{grid-template-columns:1fr;}
-  }
-  .footer-brand .brand{ margin-bottom:14px; }
-  .footer-brand p{ color:var(--text-dim); font-size:0.92rem; max-width:32ch; }
-  .footer-col h5{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--text-faint);
-    margin-bottom:18px;
-  }
-  .footer-col a, .footer-col span{
-    display:block;
-    color:var(--text-dim);
-    font-size:0.92rem;
-    margin-bottom:12px;
-    transition:color .2s ease;
-  }
-  .footer-col a:hover{ color:var(--text); }
-  .footer-bottom{
-    border-top:1px solid var(--border);
-    padding-top:28px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:16px;
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:0.06em;
-    color:var(--text-faint);
-  }
-
-  /* ===== scroll reveal ===== */
-  .reveal{
-    opacity:0;
-    transform:translateY(28px);
-    transition:opacity .9s var(--ease), transform .9s var(--ease);
-    will-change:opacity, transform;
-  }
-  .reveal.in-view{
-    opacity:1;
-    transform:translateY(0);
-  }
-  .cap-grid .reveal:nth-child(2){transition-delay:.08s;}
-  .cap-grid .reveal:nth-child(3){transition-delay:.16s;}
-  .cap-grid .reveal:nth-child(4){transition-delay:.04s;}
-  .cap-grid .reveal:nth-child(5){transition-delay:.12s;}
-  .cap-grid .reveal:nth-child(6){transition-delay:.2s;}
-  .why-grid .reveal:nth-child(2){transition-delay:.1s;}
-  .why-grid .reveal:nth-child(3){transition-delay:.2s;}
-  .testimonial-grid .reveal:nth-child(2){transition-delay:.1s;}
-  .testimonial-grid .reveal:nth-child(3){transition-delay:.2s;}
-  .stats .reveal:nth-child(2){transition-delay:.06s;}
-  .stats .reveal:nth-child(3){transition-delay:.12s;}
-  .stats .reveal:nth-child(4){transition-delay:.18s;}
-  .process-track .reveal:nth-child(2){transition-delay:.08s;}
-  .process-track .reveal:nth-child(3){transition-delay:.16s;}
-  .process-track .reveal:nth-child(4){transition-delay:.24s;}
-  .process-track .reveal:nth-child(5){transition-delay:.32s;}
-
-  /* focus visibility */
-  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:2px;
-  }
+}
 </style>
 </head>
-<body>
 
-<!-- ===== Header ===== -->
-<header>
+<body>
+<header id="siteHeader">
   <div class="wrap nav">
-    <a href="#top" class="brand">
+    <a href="#top" class="brand" aria-label="Origin Core home">
       <img src="logo.png" alt="Origin Core logo">
       Origin&nbsp;Core
     </a>
-    <nav class="nav-links">
+
+    <nav class="nav-links" aria-label="Primary navigation">
       <a href="#capabilities">Capabilities</a>
       <a href="#ai-agents">AI Agents</a>
       <a href="#enterprise">Enterprise</a>
@@ -1022,9 +1553,10 @@
       <a href="careers.html">Careers</a>
       <a href="#contact">Contact</a>
     </nav>
+
     <div class="nav-right">
       <a href="#contact" class="btn btn-primary nav-cta">Start a project</a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle">
+      <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobilePanel" id="navToggle">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -1042,15 +1574,13 @@
 </div>
 
 <main id="top">
-
-  <!-- ===== Hero ===== -->
-  <section class="hero">
+  <section class="hero" aria-labelledby="heroTitle">
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="wrap">
       <div class="hero-grid">
         <div class="hero-copy">
           <div class="eyebrow">AI Agents · Enterprise Software</div>
-          <h1>We build the <span class="accent-word">core systems</span> your business runs on.</h1>
+          <h1 id="heroTitle">We build the <span class="accent-word">core systems</span> your business runs on.</h1>
           <p class="lede">Origin Core designs, builds, and operates AI agents and enterprise software for teams that can't afford to get their infrastructure wrong from first prototype to systems running production workloads every day.</p>
           <div class="hero-actions">
             <a href="#contact" class="btn btn-primary">
@@ -1087,15 +1617,9 @@
           </svg>
 
           <div class="orbit-ring">
-            <div class="orbit-item" data-angle="0">
-              <div class="pin"><span class="chip"><span class="dot"></span>Agents</span></div>
-            </div>
-            <div class="orbit-item" data-angle="120">
-              <div class="pin"><span class="chip"><span class="dot alt"></span>Systems</span></div>
-            </div>
-            <div class="orbit-item" data-angle="240">
-              <div class="pin"><span class="chip"><span class="dot"></span>Data</span></div>
-            </div>
+            <div class="orbit-item" data-angle="0"><div class="pin"><span class="chip"><span class="dot"></span>Agents</span></div></div>
+            <div class="orbit-item" data-angle="120"><div class="pin"><span class="chip"><span class="dot alt"></span>Systems</span></div></div>
+            <div class="orbit-item" data-angle="240"><div class="pin"><span class="chip"><span class="dot"></span>Data</span></div></div>
           </div>
 
           <div class="core-center">
@@ -1125,75 +1649,94 @@
       </div>
 
       <div class="stats" id="heroStats">
-        <div class="stat reveal">
-          <div class="num"><span>40</span>+</div>
-          <div class="desc">Agents in production</div>
-        </div>
-        <div class="stat reveal">
-          <div class="num"><span>15</span></div>
-          <div class="desc">Industries served</div>
-        </div>
-        <div class="stat reveal">
-          <div class="num"><span>99.9</span>%</div>
-          <div class="desc">Platform uptime</div>
-        </div>
-        <div class="stat reveal">
-          <div class="num"><span>24</span>/7</div>
-          <div class="desc">Operations support</div>
-        </div>
+        <div class="stat reveal"><div class="num"><span>40</span>+</div><div class="desc">Agents in production</div></div>
+        <div class="stat reveal"><div class="num"><span>15</span></div><div class="desc">Industries served</div></div>
+        <div class="stat reveal"><div class="num"><span>99.9</span>%</div><div class="desc">Platform uptime</div></div>
+        <div class="stat reveal"><div class="num"><span>24</span>/7</div><div class="desc">Operations support</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Capabilities ===== -->
-  <section id="capabilities">
+  <section id="chatbot" class="chatbot-section" aria-labelledby="chatbotTitle">
+    <div class="wrap">
+      <div class="chatbot-wrap reveal">
+        <h2 id="chatbotTitle">Ask Origin Core anything</h2>
+
+        <div class="chatbot-card" aria-label="Origin Core chatbot">
+          <div class="chatbot-messages" id="chatbotMessages" aria-live="polite" aria-relevant="additions">
+            <div class="chatbot-message bot">Hi — I can answer questions about Origin Core, AI agents, enterprise software, automation, technology stack, project flow, integrations, timelines, and how to start a project.</div>
+          </div>
+
+          <form class="chatbot-input-row" id="chatbotForm">
+            <button class="chatbot-control" type="button" id="chatbotSuggestionsToggle" aria-label="Focus suggested questions">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+
+            <textarea class="chatbot-field" id="chatbotInput" rows="1" placeholder="Ask about Origin Core, AI agents, automation, project flow..." autocomplete="off" maxlength="500"></textarea>
+
+            <button class="chatbot-control" type="button" id="chatbotRandomPrompt" aria-label="Try a suggested question">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+            </button>
+
+            <button class="chatbot-send" type="submit" id="chatbotSend">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M12 3v3M12 18v3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M3 12h3M18 12h3M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/></svg>
+              Ask
+            </button>
+          </form>
+
+          <div class="chatbot-suggestions" id="chatbotSuggestions">
+            <button class="chatbot-chip" type="button">What does Origin Core do?</button>
+            <button class="chatbot-chip" type="button">What tech stack we use?</button>
+            <button class="chatbot-chip" type="button">What would be the flow of the project I deal with Origin Core?</button>
+          </div>
+        </div>
+
+        <div class="chatbot-note">Powered by Origin Core AI · Focused on our services, stack, and project process</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities" aria-labelledby="capabilitiesTitle">
     <div class="wrap">
       <div class="section-head reveal">
         <div class="eyebrow">What we build</div>
-        <h2>One core. Every system you need.</h2>
+        <h2 id="capabilitiesTitle">One core. Every system you need.</h2>
         <p class="lede">We work as a single team across agents, software, and infrastructure so the pieces fit together from day one instead of getting stitched together later.</p>
       </div>
 
       <div class="cap-grid">
         <div class="cap-card reveal">
-          <div class="cap-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-          </div>
+          <div class="cap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
           <h3>AI agent development</h3>
           <p>Autonomous agents that plan, decide, and act across your tools with the guardrails your team controls.</p>
         </div>
+
         <div class="cap-card reveal">
-          <div class="cap-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M9 22h6M12 18v4"/></svg>
-          </div>
+          <div class="cap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M9 22h6M12 18v4"/></svg></div>
           <h3>Enterprise software</h3>
           <p>Custom platforms for operations, finance, and service teams built around your workflows, not the other way round.</p>
         </div>
+
         <div class="cap-card reveal">
-          <div class="cap-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M10 6.5h4M17.5 10v4M14 17.5h-4M6.5 14v-4"/></svg>
-          </div>
+          <div class="cap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M10 6.5h4M17.5 10v4M14 17.5h-4M6.5 14v-4"/></svg></div>
           <h3>Systems integration</h3>
           <p>Connect agents and applications to your ERP, CRM, and legacy systems without disrupting what already works.</p>
         </div>
+
         <div class="cap-card reveal">
-          <div class="cap-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 12h6M3 12l3-3M3 12l3 3"/><path d="M12 3v6M12 3l-3 3M12 3l3 3"/></svg>
-          </div>
+          <div class="cap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 12h6M3 12l3-3M3 12l3 3"/><path d="M12 3v6M12 3l-3 3M12 3l3 3"/></svg></div>
           <h3>Workflow automation</h3>
           <p>Replace manual handoffs with pipelines that run on a schedule, on an event, or on demand and never get forgotten.</p>
         </div>
+
         <div class="cap-card reveal">
-          <div class="cap-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
-          </div>
+          <div class="cap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></div>
           <h3>Data &amp; ML infrastructure</h3>
           <p>Pipelines, models, and monitoring that keep your agents accurate as your data and your business changes.</p>
         </div>
+
         <div class="cap-card reveal">
-          <div class="cap-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-          </div>
+          <div class="cap-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
           <h3>Product design (UI/UX)</h3>
           <p>Interfaces that make complex agentic systems feel simple for the people who use them every day.</p>
         </div>
@@ -1201,43 +1744,33 @@
     </div>
   </section>
 
-  <!-- ===== AI Agents ===== -->
-  <section id="ai-agents" class="section-alt">
+  <section id="ai-agents" class="section-alt" aria-labelledby="agentsTitle">
     <div class="wrap">
       <div class="split">
         <div class="split-copy">
           <div class="eyebrow">AI agents</div>
-          <h2>Agents that act, not just answer.</h2>
+          <h2 id="agentsTitle">Agents that act, not just answer.</h2>
           <p class="lede">An Origin Core agent doesn't stop at generating a response. It reads the task, decides what to do, calls the right tools, and reports back with people kept in the loop wherever it matters.</p>
 
           <div class="feature-list">
             <div class="feature-item">
-              <div class="feature-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
-              <div>
-                <h4>Tool &amp; API access</h4>
-                <p>Agents call your internal APIs, databases, and SaaS tools directly using the permissions you set.</p>
-              </div>
+              <div class="feature-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div><h4>Tool &amp; API access</h4><p>Agents call your internal APIs, databases, and SaaS tools directly using the permissions you set.</p></div>
             </div>
+
             <div class="feature-item">
-              <div class="feature-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
-              <div>
-                <h4>Human-in-the-loop</h4>
-                <p>Approval steps and full audit trails for any action that needs a person to sign off.</p>
-              </div>
+              <div class="feature-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div><h4>Human-in-the-loop</h4><p>Approval steps and full audit trails for any action that needs a person to sign off.</p></div>
             </div>
+
             <div class="feature-item">
-              <div class="feature-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
-              <div>
-                <h4>Memory &amp; context</h4>
-                <p>Agents keep the context of a task across steps, tools, and sessions so nothing repeats itself.</p>
-              </div>
+              <div class="feature-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div><h4>Memory &amp; context</h4><p>Agents keep the context of a task across steps, tools, and sessions so nothing repeats itself.</p></div>
             </div>
+
             <div class="feature-item">
-              <div class="feature-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
-              <div>
-                <h4>Continuous evaluation</h4>
-                <p>We monitor every agent decision in production and retrain on real outcomes, not just test cases.</p>
-              </div>
+              <div class="feature-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div><h4>Continuous evaluation</h4><p>We monitor every agent decision in production and retrain on real outcomes, not just test cases.</p></div>
             </div>
           </div>
         </div>
@@ -1245,77 +1778,38 @@
         <div class="split-visual">
           <div class="loop-diagram" aria-hidden="true">
             <div class="loop-ring"></div>
-            <div class="loop-node n1">
-              <div class="tag">Step 01</div>
-              <h4>Perceive</h4>
-              <p>Reads requests, data, and system state.</p>
-            </div>
-            <div class="loop-node n2">
-              <div class="tag">Step 02</div>
-              <h4>Decide</h4>
-              <p>Plans the next action within set guardrails.</p>
-            </div>
-            <div class="loop-node n3">
-              <div class="tag">Step 03</div>
-              <h4>Act</h4>
-              <p>Calls tools, updates systems, reports results.</p>
-            </div>
-            <div class="loop-center">
-              <img src="logo.png" alt="">
-            </div>
+            <div class="loop-node n1"><div class="tag">Step 01</div><h4>Perceive</h4><p>Reads requests, data, and system state.</p></div>
+            <div class="loop-node n2"><div class="tag">Step 02</div><h4>Decide</h4><p>Plans the next action within set guardrails.</p></div>
+            <div class="loop-node n3"><div class="tag">Step 03</div><h4>Act</h4><p>Calls tools, updates systems, reports results.</p></div>
+            <div class="loop-center"><img src="logo.png" alt=""></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Enterprise Software ===== -->
-  <section id="enterprise">
+  <section id="enterprise" aria-labelledby="enterpriseTitle">
     <div class="wrap">
       <div class="split reverse">
         <div class="split-visual">
           <div class="stack-diagram" aria-hidden="true">
-            <div class="stack-layer">
-              <span class="name">Interface</span>
-              <span class="tag">Web &amp; mobile</span>
-            </div>
-            <div class="stack-layer">
-              <span class="name">Application logic</span>
-              <span class="tag">Custom services</span>
-            </div>
-            <div class="stack-layer">
-              <span class="name">Data layer</span>
-              <span class="tag">SQL · vector · cache</span>
-            </div>
-            <div class="stack-layer">
-              <span class="name">Agents &amp; automation</span>
-              <span class="tag">Origin Core</span>
-            </div>
+            <div class="stack-layer"><span class="name">Interface</span><span class="tag">Web &amp; mobile</span></div>
+            <div class="stack-layer"><span class="name">Application logic</span><span class="tag">Custom services</span></div>
+            <div class="stack-layer"><span class="name">Data layer</span><span class="tag">SQL · vector · cache</span></div>
+            <div class="stack-layer"><span class="name">Agents &amp; automation</span><span class="tag">Origin Core</span></div>
           </div>
         </div>
 
         <div class="split-copy">
           <div class="eyebrow">Enterprise software</div>
-          <h2>Built on what you already run.</h2>
+          <h2 id="enterpriseTitle">Built on what you already run.</h2>
           <p class="lede">We don't ask you to rip and replace. We design systems that sit cleanly on top of your current stack modernizing where it matters and leaving the rest alone.</p>
 
           <div class="check-list">
-            <div class="check-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-              Legacy modernization without downtime
-            </div>
-            <div class="check-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-              Role-based access and full audit logging
-            </div>
-            <div class="check-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-              Cloud-native, on-premise, or hybrid deployment
-            </div>
-            <div class="check-item">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-              Security practices aligned to SOC 2 controls
-            </div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Legacy modernization without downtime</div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Role-based access and full audit logging</div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Cloud-native, on-premise, or hybrid deployment</div>
+            <div class="check-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Security practices aligned to SOC 2 controls</div>
           </div>
 
           <div class="hero-actions" style="margin-top:38px;">
@@ -1329,85 +1823,55 @@
     </div>
   </section>
 
-  <!-- ===== Process ===== -->
-  <section id="process" class="section-alt">
+  <section id="process" class="section-alt" aria-labelledby="processTitle">
     <div class="wrap">
       <div class="section-head reveal">
         <div class="eyebrow">How we work</div>
-        <h2>From first conversation to running system.</h2>
+        <h2 id="processTitle">From first conversation to running system.</h2>
         <p class="lede">Every engagement follows the same five stages so you always know what's next and what we need from you.</p>
       </div>
 
       <div class="process-track">
-        <div class="process-step reveal">
-          <div class="process-num">01</div>
-          <h4>Discover</h4>
-          <p>We map your current systems, data, and the outcome you're trying to reach.</p>
-        </div>
-        <div class="process-step reveal">
-          <div class="process-num">02</div>
-          <h4>Design</h4>
-          <p>Architecture, agent behaviour, and interfaces are scoped and reviewed with your team.</p>
-        </div>
-        <div class="process-step reveal">
-          <div class="process-num">03</div>
-          <h4>Build</h4>
-          <p>We build in short cycles, with working software to review every step of the way.</p>
-        </div>
-        <div class="process-step reveal">
-          <div class="process-num">04</div>
-          <h4>Deploy</h4>
-          <p>Systems go live behind feature flags and monitoring, rolled out on your schedule.</p>
-        </div>
-        <div class="process-step reveal">
-          <div class="process-num">05</div>
-          <h4>Operate</h4>
-          <p>We monitor, support, and improve the system as your data and needs evolve.</p>
-        </div>
+        <div class="process-step reveal"><div class="process-num">01</div><div><h4>Discover</h4><p>We map your current systems, data, and the outcome you're trying to reach.</p></div></div>
+        <div class="process-step reveal"><div class="process-num">02</div><div><h4>Design</h4><p>Architecture, agent behaviour, and interfaces are scoped and reviewed with your team.</p></div></div>
+        <div class="process-step reveal"><div class="process-num">03</div><div><h4>Build</h4><p>We build in short cycles, with working software to review every step of the way.</p></div></div>
+        <div class="process-step reveal"><div class="process-num">04</div><div><h4>Deploy</h4><p>Systems go live behind feature flags and monitoring, rolled out on your schedule.</p></div></div>
+        <div class="process-step reveal"><div class="process-num">05</div><div><h4>Operate</h4><p>We monitor, support, and improve the system as your data and needs evolve.</p></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Why Origin Core ===== -->
-  <section>
+  <section aria-labelledby="whyTitle">
     <div class="wrap">
       <div class="section-head reveal">
         <div class="eyebrow">Why Origin Core</div>
-        <h2>A team built to own the outcome.</h2>
+        <h2 id="whyTitle">A team built to own the outcome.</h2>
       </div>
 
       <div class="why-grid">
         <div class="why-card reveal">
-          <h3>
-            <span class="why-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6l-8-4z"/></svg></span>
-            Security &amp; compliance
-          </h3>
+          <h3><span class="why-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 4 8 8 10 4-2 8-5 8-10V6l-8-4z"/></svg></span>Security &amp; compliance</h3>
           <p>Access control, encryption, and audit logging are part of the design from day one not bolted on after launch.</p>
         </div>
+
         <div class="why-card reveal">
-          <h3>
-            <span class="why-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a6 6 0 0 1 12 0v2"/><circle cx="17" cy="9" r="3"/><path d="M22 21v-1.5a4.5 4.5 0 0 0-3-4.24"/></svg></span>
-            A dedicated team
-          </h3>
+          <h3><span class="why-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a6 6 0 0 1 12 0v2"/><circle cx="17" cy="9" r="3"/><path d="M22 21v-1.5a4.5 4.5 0 0 0-3-4.24"/></svg></span>A dedicated team</h3>
           <p>You work with the same engineers, designers, and project lead from kickoff through ongoing operations.</p>
         </div>
+
         <div class="why-card reveal">
-          <h3>
-            <span class="why-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>
-            Built to last
-          </h3>
+          <h3><span class="why-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Built to last</h3>
           <p>Clear documentation, sensible defaults, and code your internal team can maintain after we hand it over.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Testimonials ===== -->
-  <section class="section-alt">
+  <section class="section-alt" aria-labelledby="testimonialsTitle">
     <div class="wrap">
       <div class="section-head reveal">
         <div class="eyebrow">From our clients</div>
-        <h2>Teams running on Origin Core.</h2>
+        <h2 id="testimonialsTitle">Teams running on Origin Core.</h2>
       </div>
 
       <div class="testimonial-grid" id="testimonialGrid">
@@ -1415,10 +1879,12 @@
           <p class="quote">"Our support agent now handles the majority of first-line tickets on its own, and escalates the rest with full context. Response times dropped within the first month."</p>
           <div class="who"><strong>Director of Operations</strong>Logistics &amp; freight</div>
         </div>
+
         <div class="testimonial reveal">
           <p class="quote">"They rebuilt our internal claims platform without a single day of downtime. The team understood our compliance constraints better than some of our own vendors."</p>
           <div class="who"><strong>VP of Engineering</strong>Fintech</div>
         </div>
+
         <div class="testimonial reveal">
           <p class="quote">"What stood out was the handover. Clear docs, a system our team could actually maintain, and an agent that keeps improving as we feed it more data."</p>
           <div class="who"><strong>Head of Product</strong>Healthcare SaaS</div>
@@ -1427,12 +1893,11 @@
     </div>
   </section>
 
-  <!-- ===== Contact ===== -->
-  <section id="contact">
+  <section id="contact" aria-labelledby="contactTitle">
     <div class="wrap">
       <div class="section-head reveal">
         <div class="eyebrow">Get in touch</div>
-        <h2>Let's find your core.</h2>
+        <h2 id="contactTitle">Let's find your core.</h2>
         <p class="lede">Tell us what you're trying to build or fix. We'll reply within one business day with next steps.</p>
       </div>
 
@@ -1440,14 +1905,17 @@
         <div class="contact-info">
           <h3>Origin Core</h3>
           <p class="lede">AI agents and enterprise software for teams that need systems they can trust and run.</p>
+
           <div class="contact-line">
             <span class="label">Email</span>
             <a href="mailto:hello@origincore.dev">hello@origincore.dev</a>
           </div>
+
           <div class="contact-line">
             <span class="label">Availability</span>
             <span>New projects starting within 2–4 weeks</span>
           </div>
+
           <div class="contact-line">
             <span class="label">Response time</span>
             <span>Within 1 business day</span>
@@ -1458,18 +1926,21 @@
           <div class="form-row">
             <div class="field">
               <label for="name">Name</label>
-              <input type="text" id="name" name="name" required placeholder="Your name">
+              <input type="text" id="name" name="name" required placeholder="Your name" autocomplete="name">
             </div>
+
             <div class="field">
               <label for="email">Email</label>
-              <input type="email" id="email" name="email" required placeholder="you@company.com">
+              <input type="email" id="email" name="email" required placeholder="you@company.com" autocomplete="email">
             </div>
           </div>
+
           <div class="form-row">
             <div class="field">
               <label for="company">Company</label>
-              <input type="text" id="company" name="company" placeholder="Company name">
+              <input type="text" id="company" name="company" placeholder="Company name" autocomplete="organization">
             </div>
+
             <div class="field">
               <label for="interest">I'm interested in</label>
               <select id="interest" name="interest">
@@ -1480,34 +1951,34 @@
               </select>
             </div>
           </div>
+
           <div class="field">
             <label for="message">Project details</label>
             <textarea id="message" name="message" placeholder="What are you trying to build?"></textarea>
           </div>
+
           <div class="form-note">We'll only use these details to respond to your message.</div>
+
           <button type="submit" class="btn btn-primary" style="align-self:flex-start;">
             Send message
             <svg class="btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
           </button>
+
           <div class="form-success" id="formSuccess">Message sent — we'll get back to you within one business day.</div>
         </form>
       </div>
     </div>
   </section>
-
 </main>
 
-<!-- ===== Footer ===== -->
 <footer>
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="#top" class="brand">
-          <img src="logo.png" alt="Origin Core logo">
-          Origin&nbsp;Core
-        </a>
+        <a href="#top" class="brand"><img src="logo.png" alt="Origin Core logo">Origin&nbsp;Core</a>
         <p>AI agents and enterprise software systems, designed and operated by one team.</p>
       </div>
+
       <div class="footer-col">
         <h5>Capabilities</h5>
         <a href="#ai-agents">AI agents</a>
@@ -1515,18 +1986,21 @@
         <a href="#capabilities">Systems integration</a>
         <a href="#capabilities">Automation</a>
       </div>
+
       <div class="footer-col">
         <h5>Company</h5>
         <a href="#process">Process</a>
         <a href="#contact">Contact</a>
         <a href="careers.html">Careers</a>
       </div>
+
       <div class="footer-col">
         <h5>Contact</h5>
         <a href="mailto:hello@origincore.dev">hello@origincore.dev</a>
         <span>Remote-first team</span>
       </div>
     </div>
+
     <div class="footer-bottom">
       <span>© 2026 Origin Core. All rights reserved.</span>
       <span>Designed around a single core.</span>
@@ -1535,94 +2009,391 @@
 </footer>
 
 <script>
-  // Mobile nav toggle
+(() => {
+  'use strict';
+
+  const API_BASE = 'https://origincore.pythonanywhere.com/api';
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const siteHeader = document.getElementById('siteHeader');
   const navToggle = document.getElementById('navToggle');
   const mobilePanel = document.getElementById('mobilePanel');
-  navToggle.addEventListener('click', () => {
-    const open = mobilePanel.classList.toggle('open');
-    navToggle.setAttribute('aria-expanded', open);
-  });
-  mobilePanel.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      mobilePanel.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
+  const mobileLinks = mobilePanel ? mobilePanel.querySelectorAll('a') : [];
+  const desktopNavLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+
+  function setHeaderState(){
+    if (!siteHeader) return;
+    siteHeader.classList.toggle('scrolled', window.scrollY > 8);
+  }
+
+  function closeMobileMenu(){
+    if (!mobilePanel || !navToggle) return;
+    mobilePanel.classList.remove('open');
+    document.body.classList.remove('menu-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function setupNavigation(){
+    setHeaderState();
+    window.addEventListener('scroll', setHeaderState, {passive:true});
+
+    if (navToggle && mobilePanel){
+      navToggle.addEventListener('click', () => {
+        const open = mobilePanel.classList.toggle('open');
+        document.body.classList.toggle('menu-open', open);
+        navToggle.setAttribute('aria-expanded', String(open));
+      });
+    }
+
+    mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+
+    window.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeMobileMenu();
     });
-  });
 
-  // Contact form (front-end only)
-  const form = document.getElementById('contactForm');
-  const success = document.getElementById('formSuccess');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    success.classList.add('show');
-    form.reset();
-  });
+    if ('IntersectionObserver' in window && desktopNavLinks.length){
+      const sections = desktopNavLinks
+        .map(link => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean);
 
-  // ============================================================
-  // CMS API
-  // If you've set up the Django backend (see SETUP.md in the
-  // careers CMS package), put its URL here. Leave empty to use
-  // the static content already in this page.
-  // Example: 'https://yourname.pythonanywhere.com/api'
-  // ============================================================
-  const API_BASE = 'https://origincore.pythonanywhere.com/api';
+      const sectionObserver = new IntersectionObserver(entries => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible) return;
+
+        const activeId = `#${visible.target.id}`;
+        desktopNavLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === activeId);
+        });
+      }, {
+        threshold:[.2,.45,.7],
+        rootMargin:'-18% 0px -58% 0px'
+      });
+
+      sections.forEach(section => sectionObserver.observe(section));
+    }
+  }
+
+  function escapeHTML(value){
+    return String(value ?? '')
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#039;");
+  }
+
+  function setupContactForm(){
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('formSuccess');
+
+    if (!form || !success) return;
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+
+      if (!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+
+      success.classList.add('show');
+      form.reset();
+
+      window.setTimeout(() => {
+        success.classList.remove('show');
+      }, 7000);
+    });
+  }
+
+  function getFallbackChatbotAnswer(question){
+    const normalized = question.toLowerCase().trim();
+
+    if (normalized.includes('what does origin core do') || normalized.includes('what does origincore do')){
+      return 'OriginCore builds AI agents, enterprise software, workflow automation, custom SaaS platforms, system integrations, data intelligence systems, and mission critical business applications. We help organizations replace manual work with reliable, secure, scalable software.';
+    }
+
+    if (normalized.includes('tech stack') || normalized.includes('technology') || normalized.includes('stack')){
+      return 'OriginCore works across AI, backend, frontend, data, and cloud infrastructure. Our stack includes Python, LangChain, LangGraph, OpenAI, Claude, Gemini, DeepSeek, PyTorch, TensorFlow, Django, FastAPI, Node.js, React, Next.js, TypeScript, PostgreSQL, MongoDB, Redis, Docker, Kubernetes, AWS, Azure, Google Cloud, Linux, Git, and CI/CD.';
+    }
+
+    if (normalized.includes('flow') || normalized.includes('project') || normalized.includes('process')){
+      return 'A typical OriginCore project starts with discovery, then solution design, architecture planning, development, testing, deployment, and ongoing improvement. We first understand your business problem and workflows, then build the system in focused iterations with secure architecture, clean code, and scalable infrastructure.';
+    }
+
+    return 'I can help with OriginCore and its services. Ask about AI agents, enterprise software, automation, integrations, technology stack, project flow, timelines, pricing approach, or how to start a project.';
+  }
+
+  async function requestChatbotReply(message){
+    const response = await fetch(`${API_BASE}/chatbot/`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify({message})
+    });
+
+    let data = null;
+
+    try{
+      data = await response.json();
+    }catch(error){
+      data = null;
+    }
+
+    if (!response.ok){
+      return data && data.reply ? data.reply : getFallbackChatbotAnswer(message);
+    }
+
+    return data && data.reply ? data.reply : getFallbackChatbotAnswer(message);
+  }
+
+  function setupChatbot(){
+    const chatbotForm = document.getElementById('chatbotForm');
+    const chatbotInput = document.getElementById('chatbotInput');
+    const chatbotMessages = document.getElementById('chatbotMessages');
+    const chatbotSend = document.getElementById('chatbotSend');
+    const chatbotSuggestions = document.getElementById('chatbotSuggestions');
+    const chatbotSuggestionsToggle = document.getElementById('chatbotSuggestionsToggle');
+    const chatbotRandomPrompt = document.getElementById('chatbotRandomPrompt');
+
+    if (!chatbotForm || !chatbotInput || !chatbotMessages || !chatbotSend) return;
+
+    let busy = false;
+
+    function scrollChatToBottom(){
+      chatbotMessages.scrollTo({
+        top:chatbotMessages.scrollHeight,
+        behavior:prefersReducedMotion ? 'auto' : 'smooth'
+      });
+    }
+
+    function addMessage(text, sender){
+      const message = document.createElement('div');
+      message.className = `chatbot-message ${sender}`;
+      message.innerHTML = escapeHTML(text);
+      chatbotMessages.appendChild(message);
+      scrollChatToBottom();
+      return message;
+    }
+
+    function addTyping(){
+      const typing = document.createElement('div');
+      typing.className = 'chatbot-message bot typing';
+      typing.setAttribute('aria-label','Origin Core is typing');
+      typing.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+      chatbotMessages.appendChild(typing);
+      scrollChatToBottom();
+      return typing;
+    }
+
+    function resizeInput(){
+      chatbotInput.style.height = 'auto';
+      chatbotInput.style.height = `${Math.min(chatbotInput.scrollHeight,150)}px`;
+      chatbotSend.classList.toggle('ready', chatbotInput.value.trim().length > 0);
+    }
+
+    async function submitQuestion(question){
+      const cleanQuestion = question.trim().slice(0,500);
+      if (!cleanQuestion || busy) return;
+
+      busy = true;
+      chatbotSend.disabled = true;
+      if (chatbotRandomPrompt) chatbotRandomPrompt.disabled = true;
+
+      addMessage(cleanQuestion, 'user');
+
+      chatbotInput.value = '';
+      resizeInput();
+
+      const typing = addTyping();
+
+      try{
+        const reply = await requestChatbotReply(cleanQuestion);
+        typing.remove();
+        addMessage(reply, 'bot');
+      }catch(error){
+        typing.remove();
+        addMessage(getFallbackChatbotAnswer(cleanQuestion), 'bot');
+      }finally{
+        busy = false;
+        chatbotSend.disabled = false;
+        if (chatbotRandomPrompt) chatbotRandomPrompt.disabled = false;
+        chatbotInput.focus({preventScroll:true});
+      }
+    }
+
+    chatbotForm.addEventListener('submit', event => {
+      event.preventDefault();
+      submitQuestion(chatbotInput.value);
+    });
+
+    chatbotInput.addEventListener('input', resizeInput);
+
+    chatbotInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey){
+        event.preventDefault();
+        submitQuestion(chatbotInput.value);
+      }
+    });
+
+    if (chatbotSuggestionsToggle && chatbotSuggestions){
+  chatbotSuggestionsToggle.addEventListener('click', () => {
+    const open = chatbotSuggestions.classList.toggle('open');
+    chatbotSuggestionsToggle.setAttribute('aria-expanded', String(open));
+  });
+}
+
+
+    if (chatbotRandomPrompt){
+      chatbotRandomPrompt.addEventListener('click', () => {
+        const chips = chatbotSuggestions ? Array.from(chatbotSuggestions.querySelectorAll('.chatbot-chip')) : [];
+        const questions = chips.map(chip => chip.textContent.trim()).filter(Boolean);
+        const fallbackQuestions = [
+          'What does Origin Core do?',
+          'What tech stack we use?',
+          'What would be the flow of the project I deal with Origin Core?'
+        ];
+        const list = questions.length ? questions : fallbackQuestions;
+        const question = list[Math.floor(Math.random() * list.length)];
+        chatbotInput.value = question;
+        resizeInput();
+        chatbotInput.focus();
+      });
+    }
+
+    if (chatbotSuggestions){
+      chatbotSuggestions.querySelectorAll('.chatbot-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          submitQuestion(chip.textContent || '');
+        });
+      });
+    }
+  }
 
   async function hydrateStats(page){
     if (!API_BASE) return;
+
     try{
-      const res = await fetch(`${API_BASE}/stats/?page=${page}`);
+      const res = await fetch(`${API_BASE}/stats/?page=${encodeURIComponent(page)}`, {
+        headers:{Accept:'application/json'}
+      });
+
       if (!res.ok) return;
+
       const data = await res.json();
       if (!Array.isArray(data) || !data.length) return;
+
       const statEls = document.querySelectorAll('#heroStats .stat');
-      data.forEach((stat, i) => {
-        const el = statEls[i];
+
+      data.slice(0, statEls.length).forEach((stat, index) => {
+        const el = statEls[index];
         if (!el) return;
-        el.querySelector('.num').innerHTML = `<span>${stat.value}</span>${stat.suffix || ''}`;
-        el.querySelector('.desc').textContent = stat.label;
+
+        const value = escapeHTML(stat.value);
+        const suffix = escapeHTML(stat.suffix || '');
+        const label = String(stat.label || '').trim();
+
+        el.querySelector('.num').innerHTML = `<span>${value}</span>${suffix}`;
+        el.querySelector('.desc').textContent = label || 'Origin Core metric';
       });
-    } catch (e) { /* keep static stats */ }
+    }catch(error){
+      /* Keep static stats if CMS is unavailable. */
+    }
   }
 
   async function hydrateTestimonials(){
     if (!API_BASE) return;
+
     try{
-      const res = await fetch(`${API_BASE}/testimonials/`);
+      const res = await fetch(`${API_BASE}/testimonials/`, {
+        headers:{Accept:'application/json'}
+      });
+
       if (!res.ok) return;
+
       const data = await res.json();
       if (!Array.isArray(data) || !data.length) return;
+
       const grid = document.getElementById('testimonialGrid');
-      grid.innerHTML = data.map(t => `
+      if (!grid) return;
+
+      grid.innerHTML = data.slice(0,3).map(testimonial => `
         <div class="testimonial reveal">
-          <p class="quote">"${t.quote}"</p>
-          <div class="who"><strong>${t.name}</strong>${t.detail || ''}</div>
+          <p class="quote">"${escapeHTML(testimonial.quote)}"</p>
+          <div class="who"><strong>${escapeHTML(testimonial.name)}</strong>${escapeHTML(testimonial.detail || '')}</div>
         </div>
       `).join('');
-    } catch (e) { /* keep static testimonials */ }
+    }catch(error){
+      /* Keep static testimonials if CMS is unavailable. */
+    }
   }
 
   function setupRevealObserver(){
     const revealEls = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window){
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting){
-            entry.target.classList.add('in-view');
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-      revealEls.forEach(el => revealObserver.observe(el));
-    } else {
+
+    if (!revealEls.length) return;
+
+    if (!('IntersectionObserver' in window)){
       revealEls.forEach(el => el.classList.add('in-view'));
+      return;
     }
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold:.15,
+      rootMargin:'0px 0px -42px 0px'
+    });
+
+    revealEls.forEach(el => revealObserver.observe(el));
   }
 
-  (async function init(){
-    await Promise.all([hydrateStats('home'), hydrateTestimonials()]);
-    setupRevealObserver();
-  })();
-</script>
+  function setupPointerGlow(){
+    if (prefersReducedMotion || !window.matchMedia('(hover:hover)').matches) return;
 
+    const glowCards = document.querySelectorAll('.cap-card, .why-card, .testimonial');
+
+    glowCards.forEach(card => {
+      card.addEventListener('pointermove', event => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', `${x}%`);
+        card.style.setProperty('--my', `${y}%`);
+      });
+    });
+  }
+
+  async function init(){
+    setupNavigation();
+    setupContactForm();
+    setupChatbot();
+    setupPointerGlow();
+
+    await Promise.all([
+      hydrateStats('home'),
+      hydrateTestimonials()
+    ]);
+
+    setupRevealObserver();
+    setupPointerGlow();
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init, {once:true});
+  }else{
+    init();
+  }
+})();
+</script>
 </body>
 </html>
