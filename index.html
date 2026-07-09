@@ -2252,15 +2252,19 @@ select:focus-visible{
 
   .chatbot-card{
     border-radius:24px;
+    height:min(640px, calc(100dvh - 150px));
     min-height:520px;
     display:flex;
     flex-direction:column;
   }
 
   .chatbot-messages{
-    flex:1;
+    flex:1 1 auto;
+    min-height:0;
     max-height:none;
-    min-height:290px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
     padding:18px 18px 0;
     gap:12px;
   }
@@ -2469,11 +2473,12 @@ select:focus-visible{
   }
 
   .chatbot-card{
-    min-height:560px;
+    height:min(620px, calc(100dvh - 140px));
+    min-height:540px;
   }
 
   .chatbot-messages{
-    min-height:320px;
+    min-height:0;
   }
 
   .chatbot-wrap h2{
@@ -2515,11 +2520,12 @@ select:focus-visible{
   }
 
   .chatbot-card{
-    min-height:540px;
+    height:min(600px, calc(100dvh - 132px));
+    min-height:520px;
   }
 
   .chatbot-messages{
-    min-height:300px;
+    min-height:0;
   }
 }
 </style>
@@ -3269,10 +3275,17 @@ select:focus-visible{
     const rfqForm = document.getElementById('chatbotRfqForm');
     const rfqStatus = document.getElementById('chatbotRfqStatus');
 
-    function scrollChatToBottom(){
-      chatbotMessages.scrollTo({
-        top:chatbotMessages.scrollHeight,
-        behavior:prefersReducedMotion ? 'auto' : 'smooth'
+    function scrollChatToBottom(force = false){
+      const distanceFromBottom = chatbotMessages.scrollHeight - chatbotMessages.scrollTop - chatbotMessages.clientHeight;
+      const shouldAutoScroll = force || distanceFromBottom < 120;
+
+      if (!shouldAutoScroll) return;
+
+      requestAnimationFrame(() => {
+        chatbotMessages.scrollTo({
+          top:chatbotMessages.scrollHeight,
+          behavior:prefersReducedMotion ? 'auto' : 'smooth'
+        });
       });
     }
 
@@ -3281,7 +3294,7 @@ select:focus-visible{
       message.className = `chatbot-message ${sender}`;
       message.innerHTML = escapeHTML(text);
       chatbotMessages.appendChild(message);
-      scrollChatToBottom();
+      scrollChatToBottom(sender === 'user');
 
       if (shouldStore && (sender === 'user' || sender === 'bot')){
         conversationHistory.push({
@@ -3300,7 +3313,7 @@ select:focus-visible{
       typing.setAttribute('aria-label','Origin Core is typing');
       typing.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
       chatbotMessages.appendChild(typing);
-      scrollChatToBottom();
+      scrollChatToBottom(true);
       return typing;
     }
 
